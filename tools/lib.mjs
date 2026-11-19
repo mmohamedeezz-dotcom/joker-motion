@@ -11,7 +11,7 @@ export const SR = 48000;
 /* ---------- the engine, loaded once (the same files the browser runs) ---------- */
 export function engine() {
   if (!globalThis.JM || !globalThis.JM.mount) {
-    for (const f of ["engine/core.js", "engine/scenes.js"]) vm.runInThisContext(fs.readFileSync(path.join(ROOT, f), "utf8"), { filename: f });
+    for (const f of ["engine/core.js", "engine/scenes_1.js", "engine/scenes_2.js", "engine/scenes_3.js", "engine/scenes_icons.js"]) vm.runInThisContext(fs.readFileSync(path.join(ROOT, f), "utf8"), { filename: f });
   }
   return globalThis.JM;
 }

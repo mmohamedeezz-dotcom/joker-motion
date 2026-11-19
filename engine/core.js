@@ -176,7 +176,7 @@
         else bx = { x: k === 0 ? 560 : 80, y: STAGE.y + (k === 0 ? 0 : 70), w: 440, h: STAGE.h - 70 };
         var s = Math.min(bx.w / def.w, bx.h / def.h, sp.max || def.max || 1.45) * (sp.scale || 1);
         var ox = bx.x + (bx.w - def.w * s) / 2 + (sp.dx || 0), oy = bx.y + (bx.h - def.h * s) / 2 + (sp.dy || 0);
-        var wrap = H.mk(layer, "div", "position:absolute;left:" + Math.round(ox) + "px;top:" + Math.round(oy) + "px;width:" + def.w + "px;height:" + def.h + "px");
+        var wrap = H.mk(layer, "div", "position:absolute;left:" + Math.round(ox) + "px;top:" + Math.round(oy) + "px;width:" + def.w + "px;height:" + def.h + "px;filter:drop-shadow(" + (12 / s).toFixed(1) + "px " + (14 / s).toFixed(1) + "px 0 " + ((b.world === "deep" || b.world === "night") ? "rgba(0,0,0,0.32)" : rgba(P.ink, 0.15)) + ")");
         H.set(wrap, { scale: s, transformOrigin: "0% 0%" });
         var root = H.mk(wrap, "div", "position:absolute;left:0;top:0;width:" + def.w + "px;height:" + def.h + "px");
         var S = sceneApi(b, sp, def, root, k);
@@ -253,6 +253,53 @@
       S.glow = function (cx, cy, d, col, o) { o = o || {}; return H.mk(o.p || root, "div", css(cx - d / 2, cy - d / 2, d, d) + "border-radius:50%;background:radial-gradient(circle," + (col || "rgba(255,255,255,0.75)") + " 0%,rgba(255,255,255,0) 68%)"); };
       S.spark = function (x, y, d, col, o) { o = o || {}; return H.mk(o.p || root, "div", css(x, y, d, d), '<svg xmlns="http://www.w3.org/2000/svg" width="' + d + '" height="' + d + '" viewBox="0 0 100 100"><path d="M50 0C55 35 65 45 100 50C65 55 55 65 50 100C45 65 35 55 0 50C35 45 45 35 50 0Z" fill="' + col + '"/></svg>'); };
       S.plate = function (x, y, w, h, o) { o = o || {}; return H.mk(o.p || root, "div", css(x, y, w, h) + "border-radius:" + (o.r == null ? 44 : o.r) + "px;background:" + (o.bg || "linear-gradient(160deg,#FFFFFF 0%,#F1EEE8 100%)") + ";box-shadow:0 " + (o.lift || 22) + "px " + (o.soft || 48) + "px rgba(0,0,0,0.20),0 2px 0 rgba(255,255,255,0.9) inset;"); };
+      /* ---------- the drawing kit: heavy ink line, flat palette fills, parts that move on their own ---------- */
+      var dark = b.world === "deep" || b.world === "night", K = { l: P.ink, w: "#FFFFFF", o: P.accent, n: P.deep, y: P.pop, c: P.cream, sh: "#E2DDD3", g: "#CFCAC0" };
+      if (b.world === "deep") K.n = mix(P.deep, "#000000", 0.45);
+      if (b.world === "pop") K.y = P.cream;
+      if (b.world === "hot") { K.o = P.pop; K.y = "#FFFFFF"; }
+      S.K = K;
+      function A(f, o) {
+        o = o || {};
+        return ' fill="' + (f || "none") + '"' + (o.s === 0 ? ' stroke="none"' : ' stroke="' + (o.sc || K.l) + '" stroke-width="' + (o.sw || 10) + '" stroke-linejoin="round" stroke-linecap="round"') +
+          (o.op != null ? ' opacity="' + o.op + '"' : "") + (o.t ? ' transform="' + o.t + '"' : "") + (o.da ? ' stroke-dasharray="' + o.da + '"' : "") + (o.cls ? ' class="' + o.cls + '"' : "") + "/>";
+      }
+      S.d = {
+        r: function (x, y, w, h, rx, f, o) { return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (rx || 0) + '"' + A(f, o); },
+        c: function (cx, cy, r, f, o) { return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '"' + A(f, o); },
+        e: function (cx, cy, rx, ry, f, o) { return '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + rx + '" ry="' + ry + '"' + A(f, o); },
+        p: function (dd, f, o) { return '<path d="' + dd + '"' + A(f, o); },
+        l: function (dd, o) { return '<path d="' + dd + '"' + A("none", o); },
+        g: function (inner, t) { return '<g transform="' + t + '">' + inner + "</g>"; },
+        star: function (cx, cy, r, f, o) { var q = r * 0.3; return '<path d="M' + cx + " " + (cy - r) + "l" + q + " " + (r - q) + " " + (r - q) + " " + q + " " + (q - r) + " " + q + " " + (-q) + " " + (r - q) + " " + (-q) + " " + (q - r) + " " + (q - r) + " " + (-q) + " " + (r - q) + " " + (-q) + 'z"' + A(f, { sw: (o && o.sw) || 7 }); },
+        tick: function (cx, cy, r, f, tc) { return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '"' + A(f) + '<path d="M' + (cx - r * 0.42) + " " + cy + "l" + (r * 0.3) + " " + (r * 0.32) + " " + (r * 0.56) + " " + (-r * 0.64) + '"' + A("none", { sc: tc || K.l, sw: Math.max(8, r * 0.2) }); },
+        cross: function (cx, cy, r, f, tc) { var k = r * 0.38; return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '"' + A(f) + '<path d="M' + (cx - k) + " " + (cy - k) + "l" + 2 * k + " " + 2 * k + "M" + (cx + k) + " " + (cy - k) + "l" + (-2 * k) + " " + 2 * k + '"' + A("none", { sc: tc || K.l, sw: Math.max(8, r * 0.2) }); },
+        cloud: function (x, y, k, f) { return '<path transform="translate(' + x + " " + y + ") scale(" + k + ')" d="M10 80a40 40 0 0 1 60-36 50 50 0 0 1 92 10 36 36 0 0 1 8 70H20a30 30 0 0 1-10-44z"' + A(f || K.w, { sw: 10 / k }); },
+        leaf: function (x, y, len, ang, f) { return '<path transform="translate(' + x + " " + y + ") rotate(" + ang + ')" d="M0 0C' + (len * 0.25) + " " + (-len * 0.5) + " " + (len * 0.8) + " " + (-len * 0.45) + " " + len + " 0C" + (len * 0.8) + " " + (len * 0.45) + " " + (len * 0.25) + " " + (len * 0.5) + ' 0 0z"' + A(f); },
+        person: function (x, y, k, f, f2) { return '<g transform="translate(' + x + " " + y + ") scale(" + k + ')"><path d="M-70 200v-50a70 70 0 0 1 140 0v50z"' + A(f, { sw: 10 / k }) + '<circle cx="0" cy="34" r="40"' + A(f2 || K.w, { sw: 10 / k }) + "</g>"; }
+      };
+      /* one moving piece of a drawing: its own layer the size of the scene box */
+      S.part = function (inner, o) {
+        o = o || {};
+        return H.mk(o.p || root, "div", "position:absolute;left:0;top:0;width:" + def.w + "px;height:" + def.h + "px", '<svg xmlns="http://www.w3.org/2000/svg" width="' + def.w + '" height="' + def.h + '" viewBox="0 0 ' + def.w + " " + def.h + '" style="overflow:visible">' + inner + "</svg>");
+      };
+      S.floor = function (y, x0, x1, o) { o = o || {}; var m = (x0 + x1) / 2; return S.part(S.d.l("M" + x0 + " " + y + "H" + x1) + S.d.l("M" + (x0 + 30) + " " + (y + 26) + "h60M" + (m - 10) + " " + (y + 26) + "h24M" + (x1 - 130) + " " + (y + 26) + "h90", { sw: 8, op: 0.4 }), o); };
+      S.label = function (text, x, y, w, h, fill, color, o) {
+        o = o || {};
+        var e = S.box(x, y, w, h, { bg: fill, r: h / 2, bd: [8, K.l], p: o.p }); S.txt(text, 8, 0, w - 16, h - 16, o.size || Math.round(h * 0.5), color, { p: e, l: o.d ? 0 : 1 }); return e;
+      };
+      /* sparkles that pop around a drawing: [[x, y, r, colour], …] */
+      S.stars = function (list, t, o) {
+        o = o || {};
+        list.forEach(function (st, i) {
+          var e = S.part(S.d.star(st[0], st[1], st[2], st[3] || K.y), o);
+          H.set(e, { scale: 0, rotation: -60, transformOrigin: st[0] + "px " + st[1] + "px" });
+          H.to(e, { scale: 1, rotation: 0, duration: 0.3, ease: "back.out(3)" }, t + i * 0.09);
+          H.to(e, { scale: 0.72, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 5 }, t + 0.4 + i * 0.13);
+        });
+        if (!o.q) addSfx("shimmer", t, o.g || 0);
+      };
+      S.org = function (el, x, y) { H.set(el, { transformOrigin: x + "px " + y + "px" }); return el; };
       S.q = function (el, sel) { return H.q(el, sel); };
       S.leaf = function (x, y, w, h, color, o) { o = o || {}; return S.box(x, y, w, h, { bg: color, r: o.flip ? "100% 0 100% 0" : "0 100% 0 100%", p: o.p }); };
       S.check = function (x, y, d, bg, fg, o) {
