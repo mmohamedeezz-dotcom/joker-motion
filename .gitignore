@@ -1,0 +1,5 @@
+jobs/
+out/
+node_modules/
+.DS_Store
+specs/_*.json

@@ -1,0 +1,54 @@
+name: render
+on:
+  workflow_dispatch:
+    inputs:
+      job_id: { description: "Job id (file name of the result)", required: true, default: "test" }
+      spec_b64: { description: "The spec JSON, base64. Empty = specs/gamb-shoghlak.json", required: false, default: "" }
+      sample_voice: { description: "Use samples/gamb-shoghlak.wav instead of TTS (test)", required: false, default: "false" }
+      callback_url: { description: "Webhook called with the result", required: false, default: "" }
+permissions:
+  contents: write
+concurrency:
+  group: render-${{ inputs.job_id }}
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: ffmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: spec
+        env:
+          SPEC_B64: ${{ inputs.spec_b64 }}
+          JOB_ID: ${{ inputs.job_id }}
+        run: |
+          SAFE=$(printf '%s' "$JOB_ID" | tr -cd 'A-Za-z0-9_-' | cut -c1-60); [ -n "$SAFE" ] || SAFE=job
+          echo "SAFE=$SAFE" >> "$GITHUB_ENV"
+          if [ -n "$SPEC_B64" ]; then printf '%s' "$SPEC_B64" | base64 -d > "specs/$SAFE.json"; else cp specs/gamb-shoghlak.json "specs/$SAFE.json"; fi
+      - name: render
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SAMPLE: ${{ inputs.sample_voice }}
+        run: |
+          if [ "$SAMPLE" = "true" ]; then V="--voice samples/gamb-shoghlak.wav"; else V=""; fi
+          node tools/make.mjs "specs/$SAFE.json" $V --out "out/$SAFE.mp4"
+      - name: publish
+        id: pub
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view renders >/dev/null 2>&1 || gh release create renders --title "renders" --notes "Rendered videos" --latest=false
+          gh release upload renders "out/$SAFE.mp4" --clobber
+          echo "url=https://github.com/${{ github.repository }}/releases/download/renders/$SAFE.mp4" >> "$GITHUB_OUTPUT"
+      - name: callback
+        if: ${{ always() && inputs.callback_url != '' }}
+        env:
+          CB: ${{ inputs.callback_url }}
+          URL: ${{ steps.pub.outputs.url }}
+          ST: ${{ job.status }}
+          JOB_ID: ${{ inputs.job_id }}
+        run: |
+          curl -sS -m 30 -X POST "$CB" -H "Content-Type: application/json" --data "$(jq -n --arg j "$JOB_ID" --arg s "$ST" --arg u "$URL" --arg r "${{ github.run_id }}" '{job_id:$j,status:$s,video_url:$u,run_id:$r}')" || true

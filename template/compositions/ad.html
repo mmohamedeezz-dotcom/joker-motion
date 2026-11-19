@@ -1,0 +1,19 @@
+<template>
+  <style>
+    @font-face { font-family: "Display"; src: url("assets/fonts/display.ttf"); }
+    @font-face { font-family: "Second"; src: url("assets/fonts/text.ttf"); font-weight: 100 900; }
+    #jm { position: absolute; inset: 0; overflow: hidden; background: #EFEDE8; font-family: "Display", sans-serif; }
+    #jm-stage { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: hidden; }
+  </style>
+  <div id="jm" data-composition-id="ad" data-width="1080" data-height="1920">
+    <div id="jm-stage"></div>
+  </div>
+  <script>
+    (function () {
+      var stage = document.getElementById("jm-stage");
+      var tl = gsap.timeline({ paused: true });
+      JM.mount(JM.browserHost(stage, gsap, tl), window.JM_SPEC, window.KHAAM_WORDS || []);
+      window.__timelines["ad"] = tl;
+    })();
+  </script>
+</template>
