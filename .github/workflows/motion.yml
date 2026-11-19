@@ -1,0 +1,70 @@
+name: motion
+# Drop-in for the campaign engine (n8n): the same dispatch payload and the same callback as ce-render.
+#   client_payload: { job, token, callback, spec: { code, kind: "reel", html: "<the Joker Motion JSON spec>" } }
+on:
+  repository_dispatch:
+    types: [render]
+permissions:
+  contents: write
+concurrency:
+  group: motion-${{ github.event.client_payload.job }}
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: ffmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: spec
+        env:
+          PAYLOAD: ${{ toJSON(github.event.client_payload) }}
+        run: |
+          node - <<'JS'
+          const fs = require("fs"), p = JSON.parse(process.env.PAYLOAD), s = p.spec || {};
+          const safe = (x, d) => String(x || "").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 60) || d;
+          fs.writeFileSync("code.txt", safe(s.code, "asset")); fs.writeFileSync("job.txt", safe(p.job, "job"));
+          fs.writeFileSync("specs/" + safe(s.code, "asset") + ".json", typeof s.motion === "object" && s.motion ? JSON.stringify(s.motion) : String(s.html || s.motion || ""));
+          JS
+      - name: render
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          CODE=$(cat code.txt); mkdir -p res
+          node tools/make.mjs "specs/$CODE.json" --out "res/$CODE.mp4"
+          ffmpeg -v error -y -ss 1.2 -i "res/$CODE.mp4" -frames:v 1 -q:v 3 "res/${CODE}_cover.jpg"
+          cp "jobs/$CODE/sound.json" "res/${CODE}_sound.json"
+      - name: publish
+        id: pub
+        run: |
+          JOB=$(cat job.txt)
+          git config user.name "joker-motion" && git config user.email "joker-motion@users.noreply.github.com"
+          # one small orphan branch per render, like ce-render: the CDN serves it by commit
+          mkdir -p /tmp/v/$JOB && cp res/* /tmp/v/$JOB/
+          git checkout -q --orphan m-$JOB
+          git rm -rfq --cached . >/dev/null 2>&1 || true
+          git clean -fdxq
+          mkdir -p v && cp -r /tmp/v/$JOB v/
+          git add -f v && git commit -qm "render $JOB" && git push -q origin m-$JOB
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "files=$(ls v/$JOB | tr '\n' ',')" >> "$GITHUB_OUTPUT"
+      - name: callback
+        if: ${{ always() && github.event.client_payload.callback != '' }}
+        env:
+          CB: ${{ github.event.client_payload.callback }}
+          TOKEN: ${{ github.event.client_payload.token }}
+          JOBID: ${{ github.event.client_payload.job }}
+          BASE: https://cdn.jsdelivr.net/gh/${{ github.repository }}@${{ steps.pub.outputs.sha }}/v
+          FILES: ${{ steps.pub.outputs.files }}
+          STATUS: ${{ job.status }}
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request
+          job = ''.join(c for c in os.environ['JOBID'] if c.isalnum() or c in '-_')[:60] or 'job'
+          body = {'action': 'render_done', 'job': os.environ['JOBID'], 'token': os.environ['TOKEN'], 'status': os.environ['STATUS'],
+                  'base': os.environ['BASE'] + '/' + job, 'files': [f for f in os.environ.get('FILES', '').split(',') if f]}
+          req = urllib.request.Request(os.environ['CB'], data=json.dumps(body).encode(), headers={'Content-Type': 'application/json'})
+          print(urllib.request.urlopen(req, timeout=60).status)
+          PY

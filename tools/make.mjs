@@ -13,7 +13,9 @@ if (!specFile) { console.error("usage: node tools/make.mjs specs/<name>.json [--
 const t0 = Date.now(), lap = (m) => console.log(("[" + ((Date.now() - t0) / 1000).toFixed(1) + "s] ").padEnd(10) + m);
 
 // the agent's answer may arrive wrapped in a code fence or with a line of talk around it: keep the JSON object only
-const rawSpec = fs.readFileSync(specFile, "utf8"), j0 = rawSpec.indexOf("{"), j1 = rawSpec.lastIndexOf("}");
+const rawSpec = fs.readFileSync(specFile, "utf8"), j0 = rawSpec.indexOf("{");
+let j1 = -1; for (let i = j0, d = 0, q = false, e = false; i >= 0 && i < rawSpec.length; i++) { const c = rawSpec[i]; if (q) { if (e) e = false; else if (c === "\\") e = true; else if (c === '"') q = false; } else if (c === '"') q = true; else if (c === "{") d++; else if (c === "}" && --d === 0) { j1 = i; break; } }
+if (j0 < 0 || j1 < 0) { console.error("no JSON object in the spec"); process.exit(2); }
 const spec = JSON.parse(rawSpec.slice(j0, j1 + 1)), name = path.basename(specFile, ".json");
 const JM = engine();
 // a scene the library does not have becomes a drawing from the icon library, so one wrong name never stops a video
