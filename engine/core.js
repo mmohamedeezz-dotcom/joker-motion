@@ -59,12 +59,20 @@
     var n = parseInt(h, 16); return "rgba(" + (n >> 16) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + ")";
   }
   JM.rgba = rgba;
+  function mix(hex, to, a) {
+    function p(h) { h = h.replace("#", ""); if (h.length === 3) h = h.replace(/./g, "$&$&"); var n = parseInt(h, 16); return [n >> 16, (n >> 8) & 255, n & 255]; }
+    var x = p(hex), y = p(to);
+    return "rgb(" + x.map(function (v, i) { return Math.round(v + (y[i] - v) * a); }).join(",") + ")";
+  }
+  JM.mix = mix;
   JM.palette = function (p) {
     p = p || {};
     return { paper: p.paper || "#EFEDE8", ink: p.ink || "#151515", accent: p.accent || "#F0522B", deep: p.deep || "#10294A", pop: p.pop || "#F2B544", cream: p.cream || "#F4F1EA" };
   };
   JM.worlds = function (P) {
-    function W(o) { o.soft = rgba(o.ink, 0.16); o.dots = rgba(o.ink, 0.12); o.track = rgba(o.ink, 0.16); return o; }
+    function W(o) { o.soft = rgba(o.ink, 0.16); o.dots = rgba(o.ink, 0.12); o.track = rgba(o.ink, 0.16);
+      o.grad = "linear-gradient(165deg," + mix(o.bg, "#ffffff", 0.16) + " 0%," + o.bg + " 48%," + mix(o.bg, "#000000", 0.14) + " 100%)";
+      o.blobs = [rgba(o.hi === o.card ? o.second : o.hi, 0.34), rgba(o.second, 0.26), "rgba(255,255,255,0.30)"]; return o; }
     return {
       paper: W({ bg: P.paper, ink: P.ink, bar: P.accent, barInk: P.ink, solid: P.ink, onSolid: P.paper, hi: P.accent, onHi: P.ink, card: "#FFFFFF", onCard: P.ink, bd: P.ink, second: P.deep, prog: P.accent }),
       deep: W({ bg: P.deep, ink: P.cream, bar: P.pop, barInk: P.deep, solid: P.cream, onSolid: P.deep, hi: P.pop, onHi: P.deep, card: P.cream, onCard: P.deep, bd: P.cream, second: P.accent, prog: P.pop }),
@@ -99,25 +107,40 @@
     });
     beats.forEach(function (b, bi) { b.t1 = bi + 1 < beats.length ? beats[bi + 1].t0 : END; b.tw = we(b.first + b.n - 1); });
 
-    H.rootBg(beats[0].c.bg);
-    var WIPES = ["circle", "corner", "up", "circle", "side"], wipeN = 0;
-    function dots(c, t0) {
-      var d = H.mk(null, "div", "position:absolute;left:-60px;top:-60px;width:1200px;height:2040px;background-image:radial-gradient(circle," + c.dots + " 3px,transparent 3.5px);background-size:54px 54px", null, { "data-layout-allow-overflow": "" });
-      H.fromTo(d, { x: 0, y: 0 }, { x: 54, y: -54, duration: Math.max(1, END - t0), ease: "none" }, t0);
-      return d;
+    var RICH = spec.style === "rich";
+    H.rootBg(RICH ? beats[0].c.grad : beats[0].c.bg);
+    var WIPES = ["circle", "corner", "up", "circle", "side"], wipeN = 0, TRANS = ["left", "zoom", "up", "right", "zoom"], sceneryN = 0;
+    /* the world behind a scene: paper dots (flat) or a lit gradient with slow colour blobs (rich) */
+    function scenery(c, t0, host) {
+      var k = sceneryN++, d;
+      if (!RICH) {
+        d = H.mk(host, "div", "position:absolute;left:-60px;top:-60px;width:1200px;height:2040px;background-image:radial-gradient(circle," + c.dots + " 3px,transparent 3.5px);background-size:54px 54px", null, { "data-layout-allow-overflow": "" });
+        H.fromTo(d, { x: 0, y: 0 }, { x: 54, y: -54, duration: Math.max(1, END - t0), ease: "none" }, t0);
+        return;
+      }
+      var spots = [[-260, 420, 1000, 0, 180, -120], [520, 1050, 1100, 1, -200, 140], [120, -340, 900, 2, 120, 160]];
+      spots.forEach(function (sp, i) {
+        var b = H.mk(host, "div", "position:absolute;left:" + (sp[0] + (k % 2 ? 160 : 0)) + "px;top:" + (sp[1] - (k % 3) * 120) + "px;width:" + sp[2] + "px;height:" + sp[2] + "px;border-radius:50%;background:radial-gradient(circle," + c.blobs[sp[3]] + " 0%,transparent 66%)", null, { "data-layout-allow-overflow": "" });
+        H.fromTo(b, { x: 0, y: 0, scale: 1 }, { x: sp[4], y: sp[5], scale: 1.18, duration: Math.max(2, END - t0), ease: "sine.inOut" }, t0);
+      });
+      d = H.mk(host, "div", "position:absolute;left:-60px;top:-60px;width:1200px;height:2040px;opacity:0.5;background-image:radial-gradient(circle," + c.dots + " 2.5px,transparent 3px);background-size:60px 60px", null, { "data-layout-allow-overflow": "" });
+      H.fromTo(d, { x: 0, y: 0 }, { x: 60, y: -60, duration: Math.max(1, END - t0), ease: "none" }, t0);
     }
     var progSteps = [];
     beats.forEach(function (b, bi) {
-      if (bi === 0) { dots(b.c, 0); }
+      b.wipe = false;
+      if (bi === 0) { scenery(b.c, 0, null); }
       else if (b.world !== beats[bi - 1].world) {
-        var bg = H.mk(null, "div", "position:absolute;left:0;top:0;width:1080px;height:1920px;background:" + b.c.bg), dd = dots(b.c, b.t0);
+        b.wipe = true;
+        var bg = H.mk(null, "div", "position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden;background:" + (RICH ? b.c.grad : b.c.bg));
+        scenery(b.c, b.t0, bg);
         var kind = b.spec.wipe || WIPES[wipeN++ % WIPES.length], from, to;
         if (kind === "up") { from = "inset(100% 0% 0% 0%)"; to = "inset(0% 0% 0% 0%)"; }
         else if (kind === "side") { from = "inset(0% 0% 0% 100%)"; to = "inset(0% 0% 0% 0%)"; }
         else if (kind === "corner") { from = "circle(0% at 28% 62%)"; to = "circle(140% at 28% 62%)"; }
         else { from = "circle(0% at 50% 60%)"; to = "circle(125% at 50% 60%)"; }
-        H.set([bg, dd], { clipPath: from });
-        H.to([bg, dd], { clipPath: to, duration: 0.48, ease: "power3.inOut" }, b.t0 - 0.1);
+        H.set(bg, { clipPath: from });
+        H.to(bg, { clipPath: to, duration: 0.48, ease: "power3.inOut" }, b.t0 - 0.1);
         addSfx("wipe", b.t0 + 0.14, 0);
         progSteps.push({ t: b.t0 + 0.1, c: b.c });
       }
@@ -128,11 +151,24 @@
     function buildScene(b, bi) {
       var list = b.spec.scenes || (b.spec.scene ? [b.spec.scene] : []);
       list = list.filter(function (s) { return s && JM.scenes[s.type]; }).slice(0, 2);
-      var layer = H.mk(null, "div", "position:absolute;left:0;top:0;width:1080px;height:1920px;visibility:hidden");
+      var outer = H.mk(null, "div", "position:absolute;left:0;top:0;width:1080px;height:1920px;visibility:hidden");
+      var layer = H.mk(outer, "div", "position:absolute;left:0;top:0;width:1080px;height:1920px");
       b.layer = layer;
-      H.tset(layer, { visibility: "visible" }, b.t0);
-      H.fromTo(layer, { scale: 1 }, { scale: b.spec.push || 1.05, duration: b.t1 - b.t0, ease: "none", transformOrigin: "50% 60%" }, b.t0);
-      if (bi + 1 < beats.length) H.to(layer, { autoAlpha: 0, y: -50, duration: 0.14, ease: "power2.in" }, b.t1 - 0.14);
+      H.tset(outer, { visibility: "visible" }, Math.max(0, b.t0 - 0.04));
+      H.fromTo(layer, { scale: 1 }, { scale: b.spec.push || 1.06, duration: b.t1 - b.t0, ease: "none", transformOrigin: "50% 60%" }, b.t0);
+      /* how the scene arrives and leaves: a push or a zoom-through between scenes of one world, a soft settle after a colour wipe */
+      var nx = beats[bi + 1], tr = b.spec.trans || TRANS[bi % TRANS.length], MOVE = { left: { x: 1150 }, right: { x: -1150 }, up: { y: 1500 }, zoom: { scale: 0.72, autoAlpha: 0 } };
+      if (bi > 0) {
+        var a = b.wipe ? { scale: 0.88, autoAlpha: 0 } : MOVE[tr], z = { x: 0, y: 0, scale: 1, autoAlpha: 1, duration: b.wipe ? 0.4 : 0.36, ease: "power3.out", transformOrigin: "50% 62%" };
+        H.set(outer, a); H.to(outer, z, Math.max(0, b.t0 - 0.04));
+        if (!b.wipe) addSfx("whoosh", b.t0 + 0.04, -3);
+      }
+      if (nx) {
+        var ntr = nx.spec.trans || TRANS[(bi + 1) % TRANS.length], OUT = { left: { x: -1150 }, right: { x: 1150 }, up: { y: -1500 }, zoom: { scale: 1.5, autoAlpha: 0 } };
+        var o2 = (nx.world !== b.world) ? { autoAlpha: 0, y: -50 } : OUT[ntr], zo = { duration: 0.2, ease: "power3.in", transformOrigin: "50% 62%" };
+        for (var kk in o2) zo[kk] = o2[kk];
+        H.to(outer, zo, b.t1 - 0.2); H.tset(outer, { visibility: "hidden" }, b.t1 + 0.02);
+      }
       var STAGE = { x: 80, y: 790, w: 920, h: 720 };
       list.forEach(function (sp, k) {
         var def = JM.scenes[sp.type], bx;
@@ -205,6 +241,18 @@
         var sh = o.shadow === false ? "" : '<g transform="translate(9 11)" fill="' + (o.shade || C0.soft) + '">' + d[0] + d[1] + "</g>";
         return H.mk(o.p || root, "div", css(x, y, size, size), '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 256 256" style="overflow:visible">' + sh + '<g fill="' + fill + '">' + d[0] + '</g><g fill="' + line + '">' + d[1] + "</g></svg>");
       };
+      /* a colour illustration from the art library (ART.md), with a soft shadow; falls back to the icon library */
+      S.art = function (name, x, y, size, o) {
+        o = o || {};
+        var A = G.JM_ART || {}, w = H.mk(o.p || root, "div", css(x, y, size, size));
+        if (!A[name]) { S.icon(name, 0, 0, size, { p: w }); return w; }
+        H.mk(w, "img", "position:absolute;left:0;top:0;width:" + size + "px;height:" + size + "px;" + (o.shadow === false ? "" : "filter:drop-shadow(0 " + Math.round(size * 0.045) + "px " + Math.round(size * 0.05) + "px rgba(0,0,0,0.28));") + (o.blur ? "filter:blur(" + o.blur + "px);opacity:0.92;" : ""), null, { src: A[name], alt: "" });
+        return w;
+      };
+      S.ground = function (cx, y, w, o) { o = o || {}; return H.mk(o.p || root, "div", css(cx - w / 2, y, w, Math.round(w * 0.16)) + "border-radius:50%;background:radial-gradient(ellipse at center,rgba(0,0,0,0.30) 0%,rgba(0,0,0,0) 68%)"); };
+      S.glow = function (cx, cy, d, col, o) { o = o || {}; return H.mk(o.p || root, "div", css(cx - d / 2, cy - d / 2, d, d) + "border-radius:50%;background:radial-gradient(circle," + (col || "rgba(255,255,255,0.75)") + " 0%,rgba(255,255,255,0) 68%)"); };
+      S.spark = function (x, y, d, col, o) { o = o || {}; return H.mk(o.p || root, "div", css(x, y, d, d), '<svg xmlns="http://www.w3.org/2000/svg" width="' + d + '" height="' + d + '" viewBox="0 0 100 100"><path d="M50 0C55 35 65 45 100 50C65 55 55 65 50 100C45 65 35 55 0 50C35 45 45 35 50 0Z" fill="' + col + '"/></svg>'); };
+      S.plate = function (x, y, w, h, o) { o = o || {}; return H.mk(o.p || root, "div", css(x, y, w, h) + "border-radius:" + (o.r == null ? 44 : o.r) + "px;background:" + (o.bg || "linear-gradient(160deg,#FFFFFF 0%,#F1EEE8 100%)") + ";box-shadow:0 " + (o.lift || 22) + "px " + (o.soft || 48) + "px rgba(0,0,0,0.20),0 2px 0 rgba(255,255,255,0.9) inset;"); };
       S.q = function (el, sel) { return H.q(el, sel); };
       S.leaf = function (x, y, w, h, color, o) { o = o || {}; return S.box(x, y, w, h, { bg: color, r: o.flip ? "100% 0 100% 0" : "0 100% 0 100%", p: o.p }); };
       S.check = function (x, y, d, bg, fg, o) {
