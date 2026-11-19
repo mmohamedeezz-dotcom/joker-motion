@@ -1,0 +1,9 @@
+{ "title": "ديمو مطعم", "brand": "جوكر", "palette": {}, "voice": { "name": "Puck" },
+  "beats": [
+    { "world": "paper", "text": "مطعمك حلو، / بس الزباين / [مش عارفاك].", "scenes": [ { "type": "icon", "icon": "storefront", "label": "مطعمك", "on": { "in": 0, "hit": "عارفاك" } }, { "type": "icon_count", "icon": "user", "n": 3, "k": 0, "on": { "first": "الزباين", "last": "عارفاك" } } ] },
+    { "text": "الأكل تمام، | والمكان نضيف، | بس الترابيزات / [فاضية].", "scenes": [ { "type": "icon", "icon": "fork-knife", "move": "drop", "on": { "in": "الأكل", "hit": "تمام" } }, { "type": "icon", "icon": "armchair", "move": "swing", "label": "فاضية", "on": { "in": "الترابيزات", "hit": "فاضية" } } ] },
+    { "world": "deep", "hold": true, "size": 150, "text": "الحل / [في الموبايل].", "scene": { "type": "icon_orbit", "icon": "device-mobile", "around": ["chat-circle-dots", "map-pin", "star", "megaphone", "camera", "heart"], "on": { "in": "الحل", "first": "في", "last": "الموبايل+0.5" } } },
+    { "world": "pop", "text": "تصوير، ومونتاج، / [وإعلانات ممولة]، | كله من مكان واحد.", "scene": { "type": "icon_row", "items": [ { "icon": "camera", "label": "تصوير" }, { "icon": "film-slate", "label": "مونتاج" }, { "icon": "megaphone", "label": "إعلانات" } ], "on": { "first": "تصوير", "last": "وإعلانات" } } },
+    { "world": "close", "text": "والنتيجة؟ | زباين جداد / [كل يوم].", "scenes": [ { "type": "people", "n": 5, "label": "زباينك", "on": { "grow": "زباين", "done": "يوم" } }, { "type": "chart_line", "label": "طلباتك", "on": { "draw": "والنتيجة", "peak": "جداد" } } ] },
+    { "world": "deep", "text": "ابعتلنا دلوقتي، / [وابدأ النهارده].", "scene": { "type": "icon", "icon": "paper-plane-tilt", "move": "slam", "label": "ابعت رسالة", "on": { "in": "ابعتلنا", "hit": "النهارده" } } }
+  ] }

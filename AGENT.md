@@ -43,3 +43,6 @@
 ```
 - `palette`: `deep` و`pop` من ألوان البراند لو اتبعتت؛ `accent` لون دافي للمشكلة؛ الباقي سيبه زي المثال.
 - مثال كامل: `specs/gamb-shoghlak.json`. المكتبة: `SCENES.md`.
+
+## مكتبة الرسومات (ICONS.md)
+مشاهد `icon`, `icon_row`, `icon_swap`, `icon_orbit`, `icon_card`, `icon_count` بترسم أي حاجة من 1,512 رسمة بألوان البراند. اكتب اسم الرسمة بالإنجليزي زي ما هو في `ICONS.md` (مثال: `storefront`, `fork-knife`, `truck`, `house-line`, `camera`, `megaphone`). لو المعنى له مشهد مخصوص في `SCENES.md` (ختم، ميزان، مبنى، كارنيه) استخدمه، وغير كده استخدم `icon`.

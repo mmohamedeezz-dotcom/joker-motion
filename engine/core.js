@@ -149,7 +149,7 @@
     }
 
     function sceneApi(b, sp, def, root, k) {
-      var S = { c: b.c, P: P, t0: b.t0 + (k ? 0.12 : 0), t1: b.t1, tw: b.tw, w: def.w, h: def.h, root: root, p: sp, rgba: rgba };
+      var C0 = b.c, S = { c: b.c, P: P, t0: b.t0 + (k ? 0.12 : 0), t1: b.t1, tw: b.tw, w: def.w, h: def.h, root: root, p: sp, rgba: rgba };
       S.wt = function (i) { return ws(b.first + Math.max(0, Math.min(b.n - 1, i))); };
       S.wend = function (i) { return we(b.first + Math.max(0, Math.min(b.n - 1, i))); };
       S.n = b.n;
@@ -197,6 +197,13 @@
       S.svg = function (x, y, w, h, inner, o) {
         o = o || {};
         return H.mk(o.p || root, "div", css(x, y, w, h) + (o.css || ""), '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 ' + (o.vw || w) + " " + (o.vh || h) + '" style="overflow:visible">' + inner + "</svg>");
+      };
+      /* a drawing from the icon library, in the world's colours: accent fill + ink line + a soft offset shadow */
+      S.icon = function (name, x, y, size, o) {
+        o = o || {};
+        var IC = G.JM_ICONS || {}, d = IC[name] || IC.star || ["", ""], fill = o.fill || C0.hi, line = o.line || C0.solid;
+        var sh = o.shadow === false ? "" : '<g transform="translate(9 11)" fill="' + (o.shade || C0.soft) + '">' + d[0] + d[1] + "</g>";
+        return H.mk(o.p || root, "div", css(x, y, size, size), '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 256 256" style="overflow:visible">' + sh + '<g fill="' + fill + '">' + d[0] + '</g><g fill="' + line + '">' + d[1] + "</g></svg>");
       };
       S.q = function (el, sel) { return H.q(el, sel); };
       S.leaf = function (x, y, w, h, color, o) { o = o || {}; return S.box(x, y, w, h, { bg: color, r: o.flip ? "100% 0 100% 0" : "0 100% 0 100%", p: o.p }); };

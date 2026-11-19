@@ -43,6 +43,20 @@ encode(path.join(job, "assets/vo.wav"), al.audio, 1);
 fs.writeFileSync(path.join(job, "assets/vo.words.json"), JSON.stringify({ source: "pauses cut to the pace; words timed inside each pause-to-pause span by letters (no alignment model)", words: al.words }, null, 1));
 lap("voice timed: " + JSON.stringify(al.stats));
 
+// the drawings this video uses, from the icon library (a wrong name is replaced by its closest match)
+const ICONS = JSON.parse(fs.readFileSync(path.join(ROOT, "icons/phosphor.json"), "utf8")), pick = {}, fixed = [];
+const closest = (n) => { const tk = String(n).toLowerCase().split(/[^a-z0-9]+/).filter(Boolean); let best = "star", sc = 0; for (const k in ICONS) { const kt = k.split("-"), s = tk.filter((x) => kt.includes(x)).length * 2 - kt.length * 0.1; if (s > sc) { sc = s; best = k; } } return best; };
+const fix = (n) => { if (ICONS[n]) return n; const c = closest(n); fixed.push(n + "→" + c); return c; };
+for (const b of spec.beats) for (const s of b.scenes || (b.scene ? [b.scene] : [])) {
+  for (const k of ["icon", "a", "b"]) if (typeof s[k] === "string" && (k === "icon" || s.type === "icon_swap")) s[k] = fix(s[k]);
+  if (Array.isArray(s.around)) s.around = s.around.map(fix);
+  if (Array.isArray(s.items)) s.items.forEach((x) => { if (x && typeof x === "object" && x.icon) x.icon = fix(x.icon); });
+}
+JSON.stringify(spec, (k, v) => { if (typeof v === "string" && ICONS[v]) pick[v] = ICONS[v]; return v; });
+pick.star = ICONS.star; pick.user = ICONS.user;
+fs.writeFileSync(path.join(job, "icons.js"), "window.JM_ICONS = " + JSON.stringify(pick) + ";\n");
+if (fixed.length) lap("icon names fixed: " + fixed.join(", "));
+
 // 2 · the picture's data
 fs.writeFileSync(path.join(job, "timing.js"), "window.KHAAM_WORDS = " + JSON.stringify(al.words) + ";\n");
 fs.writeFileSync(path.join(job, "spec.js"), "window.JM_SPEC = " + JSON.stringify(spec) + ";\n");

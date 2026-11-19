@@ -6,7 +6,7 @@
 node tools/make.mjs specs/gamb-shoghlak.json --voice samples/gamb-shoghlak.wav --draft
 ```
 
-- `engine/` المحرك ومكتبة المشاهد (`SCENES.md`).
+- `engine/` المحرك ومكتبة المشاهد (`SCENES.md`) و`icons/` 1,512 رسمة Phosphor (MIT، `ICONS.md`).
 - `AGENT.md` تعليمات الوكيل اللي بيكتب الـ JSON.
 - `tools/make.mjs` صوت (Gemini TTS أو ملف جاهز) ← توقيت الكلمات ← مكساج ← رندر (HyperFrames 0.8.225).
 - `.github/workflows/render.yml` رندر سحابي: `workflow_dispatch` بـ `job_id` و`spec_b64`، والنتيجة في release اسمه `renders`.
