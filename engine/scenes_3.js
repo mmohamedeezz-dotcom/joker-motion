@@ -3,7 +3,7 @@
   "use strict";
   var JM = G.JM, def = JM.scene;
 
-  def("shop", { w: 600, h: 600, doc: "محل بيتفتح: تندة مخططة ويافطة وباب وفاترينة (محل، مطعم، كافيه، مشروعك)", params: "label (اسم على اليافطة)", cues: { build: 0.05, open: 0.7 },
+  def("shop", { enter: "build", w: 600, h: 600, doc: "محل بيتفتح: تندة مخططة ويافطة وباب وفاترينة (محل، مطعم، كافيه، مشروعك)", params: "label (اسم على اليافطة)", cues: { build: 0.05, open: 0.7 },
     build: function (S, p) {
       var d = S.d, K = S.K, t = S.T("build"), to = Math.max(t + 0.7, S.T("open"));
       S.floor(540, 30, 570);
@@ -70,7 +70,7 @@
       S.pulse(g, t + dur + 0.1, 1.05, { s: "ding", g: -2 }); S.stars([[700, 30, 28, K.o]], t + dur + 0.1, { q: 1 });
     } });
 
-  def("pin", { w: 460, h: 620, doc: "علامة مكان بتقع على الخريطة (الموقع، الفرع، منطقتك)", params: "label", cues: { drop: 0.3 },
+  def("pin", { enter: "drop", w: 460, h: 620, doc: "علامة مكان بتقع على الخريطة (الموقع، الفرع، منطقتك)", params: "label", cues: { drop: 0.3 },
     build: function (S, p) {
       var d = S.d, K = S.K, t = S.T("drop");
       for (var i = 0; i < 2; i++) { var r = S.org(S.part(d.e(230, 560, 100 + i * 60, 30 + i * 16, "none", { sw: 8 })), 230, 560); S.set(r, { scale: 0, autoAlpha: 1 }); S.to(r, { scale: 1, autoAlpha: 0, duration: 0.8, ease: "power2.out", repeat: 2, repeatDelay: 0.1 }, t + 0.3 + i * 0.15); }
@@ -139,7 +139,7 @@
       S.to(g, { rotation: 180, duration: 0.5, ease: "back.inOut(1.6)" }, S.T("flip")); S.sfx("glass", S.T("flip") + 0.2, 3); S.sfx("thud", S.T("flip") + 0.5, -2);
     } });
 
-  def("quote", { w: 860, h: 480, doc: "كارت اقتباس أو رأي عميل (شهادة، رأي، جملة مهمة)", params: "text, by", cues: { show: 0.2 },
+  def("quote", { enter: "show", plain: true, w: 860, h: 480, doc: "كارت اقتباس أو رأي عميل (شهادة، رأي، جملة مهمة)", params: "text, by", cues: { show: 0.2 },
     build: function (S, p) {
       var d = S.d, K = S.K, g = S.grp(0, 0, 860, 480);
       S.box(0, 60, 860, 400, { bg: K.w, r: 50, bd: [10, K.l], p: g }); S.part(d.c(740, 70, 70, K.o) + d.p("M700 86q0-40 34-52v24q-12 8-12 20h14v32h-36zM752 86q0-40 34-52v24q-12 8-12 20h14v32h-36z", K.l, { s: 0 }), { p: g });
@@ -158,7 +158,7 @@
       S.stars([[30, 30, 26, K.y], [490, 230, 22, K.y]], t + 0.15, { q: 1 });
     } });
 
-  def("delivery", { w: 680, h: 440, doc: "عربية توصيل بتدخل وتقف (توصيل، شحن، خدمة لحد البيت)", params: "label (على جنب العربية)", cues: { in: 0.1, stop: 0.6 },
+  def("delivery", { enter: "in", w: 680, h: 440, doc: "عربية توصيل بتدخل وتقف (توصيل، شحن، خدمة لحد البيت)", params: "label (على جنب العربية)", cues: { in: 0.1, stop: 0.6 },
     build: function (S, p) {
       var d = S.d, K = S.K, g = S.grp(0, 0, 680, 440), t = S.T("in"), ts = Math.max(t + 0.5, S.T("stop"));
       S.floor(400, 10, 670);

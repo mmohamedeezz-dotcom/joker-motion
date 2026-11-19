@@ -31,6 +31,9 @@ jobs:
       - name: render
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_VOICE_ID: ${{ vars.ELEVENLABS_VOICE_ID }}
+          JM_VOICE: ${{ secrets.ELEVENLABS_API_KEY != '' && 'eleven' || 'gemini' }}
         run: |
           CODE=$(cat code.txt); mkdir -p res
           node tools/make.mjs "specs/$CODE.json" --out "res/$CODE.mp4"

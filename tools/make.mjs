@@ -5,7 +5,9 @@
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
-import { ROOT, SR, engine, decode, encode, tts, alignAndTighten, mix, master } from "./lib.mjs";
+import { ROOT, SR, engine, decode, encode, alignAndTighten, mix, master } from "./lib.mjs";
+import { makeVoice } from "./voice.mjs";
+import { elevenKey, elevenTake, tightenWords } from "./eleven.mjs";
 
 const args = process.argv.slice(2), specFile = args.find((a) => !a.startsWith("--") && a.endsWith(".json"));
 const opt = (k) => { const i = args.indexOf("--" + k); return i < 0 ? null : (args[i + 1] && !args[i + 1].startsWith("--") ? args[i + 1] : true); };
@@ -37,28 +39,38 @@ fs.mkdirSync(path.join(job, "assets/fonts"), { recursive: true });
 for (const f of ["display.ttf", "text.ttf"]) fs.copyFileSync(path.join(ROOT, "fonts", f), path.join(job, "assets/fonts", f));
 
 // 1 · the voice
-let raw = opt("voice");
+//   --voice <file>: a ready recording · ElevenLabs when its key is set (exact word times) · else Gemini TTS
+const holds = new Set((spec.beats || []).map((b, i) => (b.hold ? i : -1)).filter((i) => i >= 0));
+let raw = opt("voice"), al = null;
+const wantEleven = !opt("mute") && (!raw || raw === true) && elevenKey() && (opt("eleven") || process.env.JM_VOICE === "eleven" || (spec.voice && spec.voice.provider === "eleven"));
 if (opt("mute")) {
   // picture test with no voice: words at the reading pace over silence
   let t = 0; const n = Math.round(SR * (parsed.words.length / 2.3 + 1)), x = new Float32Array(n);
   parsed.words.forEach((w, i) => { if (i && w.beat !== parsed.words[i - 1].beat) t += 0.3; const d = 0.2 + w.say.length * 0.045; for (let k = Math.round(t * SR); k < Math.min(n, Math.round((t + d - 0.03) * SR)); k++) x[k] = 0.2 * Math.sin(k * 0.05); t += d; });
   raw = path.join(job, "assets/take.wav"); encode(raw, x.slice(0, Math.round((t + 0.2) * SR)), 1);
-} else if (!raw || raw === true) {
+} else if (wantEleven) {
+  try {
+    const tk = await elevenTake(JM.voiceText(spec), { ...(spec.voice && spec.voice.eleven ? { voice: spec.voice.eleven } : {}) }, path.join(job, "assets/take.mp3"));
+    if (tk.words.length === parsed.words.length) { al = tightenWords(tk.audio, tk.words, parsed.words, holds); lap("voice: ElevenLabs " + tk.model + ", exact word times"); }
+    else { raw = path.join(job, "assets/take.mp3"); lap("voice: ElevenLabs " + tk.model + ", word count " + tk.words.length + " vs " + parsed.words.length + ": timed by pauses"); }
+  } catch (e) { lap("ElevenLabs failed (" + e.message.slice(0, 90) + "), using Gemini"); }
+}
+if (!al && (!raw || raw === true)) {
   raw = path.join(job, "assets/take.wav");
-  await tts(JM.voiceText(spec), raw, { voice: (spec.voice && spec.voice.name) || "Puck", ...(spec.voice && spec.voice.style ? { style: spec.voice.style + "\n# TRANSCRIPT:" } : {}) });
+  const v = await makeVoice(JM.voiceText(spec).split("\n"), raw, { voice: (spec.voice && spec.voice.name) || "Puck", ...(spec.voice && spec.voice.style ? { style: spec.voice.style + "\n# TRANSCRIPT:" } : {}) }, lap);
+  fs.writeFileSync(path.join(job, "assets/voice.json"), JSON.stringify(v, null, 1));
   lap("voice generated");
 }
-const holds = new Set((spec.beats || []).map((b, i) => (b.hold ? i : -1)).filter((i) => i >= 0));
-const al = alignAndTighten(decode(raw, 1), parsed.words, holds);
+if (!al) al = alignAndTighten(decode(raw, 1), parsed.words, holds);
 encode(path.join(job, "assets/vo.wav"), al.audio, 1);
-fs.writeFileSync(path.join(job, "assets/vo.words.json"), JSON.stringify({ source: "pauses cut to the pace; words timed inside each pause-to-pause span by letters (no alignment model)", words: al.words }, null, 1));
+fs.writeFileSync(path.join(job, "assets/vo.words.json"), JSON.stringify({ source: al.stats.exact ? "word times from the voice service's own alignment; long pauses cut" : "pauses cut to the pace; words timed inside each pause-to-pause span by letters (no alignment model)", words: al.words }, null, 1));
 lap("voice timed: " + JSON.stringify(al.stats));
 
 // the drawings this video uses, from the icon library (a wrong name is replaced by its closest match)
 const ICONS = JSON.parse(fs.readFileSync(path.join(ROOT, "icons/phosphor.json"), "utf8")), pick = {}, fixed = [];
 const closest = (n) => { const tk = String(n).toLowerCase().split(/[^a-z0-9]+/).filter(Boolean); let best = "star", sc = 0; for (const k in ICONS) { const kt = k.split("-"), s = tk.filter((x) => kt.includes(x)).length * 2 - kt.length * 0.1; if (s > sc) { sc = s; best = k; } } return best; };
 const fix = (n) => { if (ICONS[n]) return n; const c = closest(n); fixed.push(n + "→" + c); return c; };
-for (const b of spec.beats) for (const s of b.scenes || (b.scene ? [b.scene] : [])) {
+for (const b of spec.beats) for (const s of b.scenes || []) {
   for (const k of ["icon", "a", "b"]) if (typeof s[k] === "string" && (k === "icon" || s.type === "icon_swap")) s[k] = fix(s[k]);
   if (Array.isArray(s.around)) s.around = s.around.map(fix);
   if (Array.isArray(s.items)) s.items.forEach((x) => { if (x && typeof x === "object" && x.icon) x.icon = fix(x.icon); });

@@ -11,7 +11,7 @@
       S.to(ray, { scaleY: 0, x: Math.sin(a) * (r + 130), y: -Math.cos(a) * (r + 130) - 28, duration: 0.24, ease: "power2.in" }, t + 0.22);
     }
   }
-  def("icon", { w: 560, h: 660, doc: "رسمة واحدة كبيرة من مكتبة الرسومات لأي حاجة بتتقال (أي اسم من ICONS.md)", params: "icon, label, move:'pop'|'drop'|'rise'|'swing'|'slam'", cues: { in: 0.1, hit: 0.7 },
+  def("icon", { enter: "in", w: 560, h: 660, doc: "رسمة واحدة كبيرة من مكتبة الرسومات لأي حاجة بتتقال (أي اسم من ICONS.md)", params: "icon, label, move:'pop'|'drop'|'rise'|'swing'|'slam'", cues: { in: 0.1, hit: 0.7 },
     build: function (S, p) {
       var C = S.c, g = S.grp(0, 0, 560, 560), t = S.T("in"), th = Math.max(t + 0.45, S.T("hit")), mv = p.move || "pop";
       var disc = S.box(50, 60, 460, 460, { bg: C.soft, r: "50%", p: g }), ic = S.icon(p.icon, 40, 40, 480, { p: g });
@@ -26,7 +26,7 @@
       if (p.label) { var l = S.box(80, 556, 400, 104, { bg: C.solid, r: 52 }); S.txt(p.label, 0, 0, 400, 104, 58, C.onSolid, { p: l, l: 1 }); S.pop(l, t + 0.3, { rot0: 8, rot: -3 }); }
     } });
 
-  def("icon_row", { w: 900, h: 460, doc: "رسمتين أو تلاتة جنب بعض بيظهروا واحدة واحدة مع أسمائهم (خدمات، مميزات، أنواع)", params: "items:[{icon,label}] (2-3)", cues: { first: 0.1, last: 0.8 },
+  def("icon_row", { enter: "first", w: 900, h: 460, doc: "رسمتين أو تلاتة جنب بعض بيظهروا واحدة واحدة مع أسمائهم (خدمات، مميزات، أنواع)", params: "items:[{icon,label}] (2-3)", cues: { first: 0.1, last: 0.8 },
     build: function (S, p) {
       var C = S.c, it = (p.items || []).slice(0, 3), n = it.length || 1, w = 900 / n, ts = S.spread(n, S.T("first"), S.T("last")), sz = Math.min(270, w - 30);
       it.forEach(function (x, i) {
@@ -37,7 +37,7 @@
       });
     } });
 
-  def("icon_swap", { w: 560, h: 680, doc: "رسمة بتتحول لرسمة تانية (من مشكلة لحل، من قبل لبعد)", params: "a (اسم رسمة), b (اسم رسمة), a_label, b_label", cues: { a: 0.1, swap: 0.6 },
+  def("icon_swap", { enter: "a", w: 560, h: 680, doc: "رسمة بتتحول لرسمة تانية (من مشكلة لحل، من قبل لبعد)", params: "a (اسم رسمة), b (اسم رسمة), a_label, b_label", cues: { a: 0.1, swap: 0.6 },
     build: function (S, p) {
       var C = S.c, t = S.T("a"), tw = Math.max(t + 0.5, S.T("swap"));
       var ga = S.grp(0, 0, 560, 680), gb = S.grp(0, 0, 560, 680);
@@ -50,7 +50,7 @@
       S.sfx("swipe", tw + 0.08, 3); S.sfx("sting", tw + 0.22, -1); burst(S, 280, 290, 250, tw + 0.25, 10, C.solid);
     } });
 
-  def("icon_orbit", { w: 900, h: 720, max: 1, doc: "رسمة في النص وحواليها رسومات صغيرة بتطلع (منظومة، كل الخدمات في مكان واحد، قنوات)", params: "icon, around:[اسم رسمة ×3-6], label", cues: { in: 0.05, first: 0.3, last: 0.9 },
+  def("icon_orbit", { enter: "in", w: 900, h: 720, max: 1, doc: "رسمة في النص وحواليها رسومات صغيرة بتطلع (منظومة، كل الخدمات في مكان واحد، قنوات)", params: "icon, around:[اسم رسمة ×3-6], label", cues: { in: 0.05, first: 0.3, last: 0.9 },
     build: function (S, p) {
       var C = S.c, ar = (p.around || []).slice(0, 6), n = ar.length || 1, ts = S.spread(n, S.T("first"), S.T("last")), ringEl = S.box(160, 70, 580, 580, { r: "50%", bd: [6, C.soft, "dashed"] });
       S.fromTo(ringEl, { rotation: 0 }, { rotation: 40, duration: Math.max(1, S.t1 - S.t0), ease: "none" }, S.t0);
@@ -65,7 +65,7 @@
       if (p.label) { var l = S.box(300, 500, 300, 90, { bg: C.hi, r: 45 }); S.txt(p.label, 0, 0, 300, 90, 50, C.onHi, { p: l, l: 1 }); S.pop(l, S.T("in") + 0.3, {}); }
     } });
 
-  def("icon_card", { w: 580, h: 700, doc: "كارت منتج أو خدمة: رسمة فوق واسم وسطرين (باقة، منتج، خدمة)", params: "icon, title, tag (شارة صغيرة)", cues: { in: 0.1, tag: 0.7 },
+  def("icon_card", { enter: "in", w: 580, h: 700, doc: "كارت منتج أو خدمة: رسمة فوق واسم وسطرين (باقة، منتج، خدمة)", params: "icon, title, tag (شارة صغيرة)", cues: { in: 0.1, tag: 0.7 },
     build: function (S, p) {
       var C = S.c, g = S.grp(0, 0, 580, 700), t = S.T("in");
       S.box(14, 18, 580, 680, { bg: C.soft, r: 56, p: g }); S.box(0, 0, 580, 680, { bg: C.card, r: 56, bd: [9, C.bd], p: g });
@@ -76,7 +76,7 @@
       S.sway(g, t + 0.8, -1, { d: 1 });
     } });
 
-  def("icon_count", { w: 900, h: 400, doc: "نفس الرسمة متكررة والملوّن منها هو النسبة (٣ من كل ٥، ٨ من ١٠)", params: "icon, n (3-6), k (كام واحدة ملوّنة), label", cues: { first: 0.1, last: 0.8 },
+  def("icon_count", { enter: "first", w: 900, h: 400, doc: "نفس الرسمة متكررة والملوّن منها هو النسبة (٣ من كل ٥، ٨ من ١٠)", params: "icon, n (3-6), k (كام واحدة ملوّنة), label", cues: { first: 0.1, last: 0.8 },
     build: function (S, p) {
       var C = S.c, n = Math.max(3, Math.min(6, p.n || 5)), k = p.k == null ? 3 : p.k, w = 900 / n, sz = Math.min(190, w - 10), ts = S.spread(n, S.T("first"), S.T("last"));
       for (var i = 0; i < n; i++) {

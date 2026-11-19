@@ -3,13 +3,13 @@
   "use strict";
   var JM = G.JM, def = JM.scene;
 
-  def("stamp", { w: 620, h: 620, doc: "ختم دائري بيخبط باسم الحل أو النموذج (إعلان الفكرة الأساسية)", params: "a (السطر الأول), b (السطر التاني)", cues: { hit: 0.4, second: 0.75 },
+  def("stamp", { plain: true, w: 620, h: 620, doc: "ختم دائري بيخبط باسم الحل أو النموذج (إعلان الفكرة الأساسية)", params: "a (السطر الأول), b (السطر التاني)", cues: { hit: 0.4, second: 0.75 },
     build: function (S, p) {
       var d = S.d, K = S.K, C = S.c, col = C.hi, rays = S.grp(310, 310, 0, 0), g = S.grp(0, 0, 620, 620);
       S.part(d.c(310, 310, 292, C.bg, { sw: 20, sc: col }) + d.c(310, 310, 252, "none", { sw: 7, sc: col, da: "4 22" }) + d.star(92, 310, 26, col, { sw: 0.01 }) + d.star(528, 310, 26, col, { sw: 0.01 }), { p: g });
       S.txt(p.a || "", 110, 110, 400, 210, 176, col, { p: g }); var b = S.txt(p.b || "", 110, 296, 400, 210, 176, C.ink, { p: g });
       S.set(g, { scale: 2.2, autoAlpha: 0, rotation: 14 }); S.set(b, { autoAlpha: 0, scale: 0.6 });
-      var t = S.T("hit");
+      var t = S.T("hit"); S.await(310, 310, 270, S.t0, t + 0.2);
       S.to(g, { scale: 1, autoAlpha: 1, rotation: -8, duration: 0.22, ease: "power4.in" }, t); S.shake(t + 0.22); S.sfx("stamp", t + 0.22, 1); S.sfx("sub", t + 0.22, 0);
       S.to(b, { autoAlpha: 1, scale: 1, duration: 0.26, ease: "back.out(2.6)" }, S.T("second")); S.sfx("shimmer", S.T("second"), 0);
       for (var r = 0; r < 12; r++) {
@@ -21,7 +21,7 @@
       S.to(g, { rotation: -5, scale: 1.04, duration: 0.8, ease: "sine.inOut" }, S.T("second") + 0.25);
     } });
 
-  def("shield", { w: 440, h: 520, doc: "درع عليه علامة صح (ضمان، أمان، ثقة، حماية)", params: "label", cues: { pop: 0.2, check: 0.6 },
+  def("shield", { enter: "pop", w: 440, h: 520, doc: "درع عليه علامة صح (ضمان، أمان، ثقة، حماية)", params: "label", cues: { pop: 0.2, check: 0.6 },
     build: function (S, p) {
       var d = S.d, K = S.K, sh = "M220 14L408 84V230Q408 372 220 432Q32 372 32 230V84Z", g = S.org(S.grp(0, 0, 440, 520), 220, 230);
       S.part(d.p(sh, K.n) + d.p("M220 14L408 84V230Q408 372 220 432Z", "#FFFFFF", { s: 0, op: 0.12 }) + d.p("M220 62L364 116V228Q364 334 220 384Q76 334 76 228V116Z", "none", { sw: 7, sc: K.y, da: "4 22" }) + d.p(sh, "none"), { p: g });
@@ -32,7 +32,7 @@
       S.stars([[40, 40, 28, K.y], [410, 380, 22, K.o]], S.T("check") + 0.3, { q: 1 });
     } });
 
-  def("stars", { w: 780, h: 240, doc: "خمس نجوم بتتملى (تقييم، رضا العملاء، جودة)", params: "n (1-5)", cues: { fill: 0.15, done: 0.8 },
+  def("stars", { enter: "fill", w: 780, h: 240, doc: "خمس نجوم بتتملى (تقييم، رضا العملاء، جودة)", params: "n (1-5)", cues: { fill: 0.15, done: 0.8 },
     build: function (S, p) {
       var d = S.d, K = S.K, n = Math.max(1, Math.min(5, p.n || 5)), ts = S.spread(5, S.T("fill"), S.T("done"));
       for (var k = 0; k < 5; k++) {
@@ -43,7 +43,7 @@
       }
     } });
 
-  def("trophy", { w: 440, h: 540, doc: "كاس (فوز، إنجاز، الأول)", params: "label", cues: { pop: 0.3 },
+  def("trophy", { enter: "pop", w: 440, h: 540, doc: "كاس (فوز، إنجاز، الأول)", params: "label", cues: { pop: 0.3 },
     build: function (S, p) {
       var d = S.d, K = S.K, g = S.org(S.grp(0, 0, 440, 540), 220, 430), h1 = "M118 80Q30 80 40 160Q50 222 128 222", h2 = "M322 80Q410 80 400 160Q390 222 312 222";
       S.part(d.l(h1, { sw: 34 }) + d.l(h1, { sw: 14, sc: K.y }) + d.l(h2, { sw: 34 }) + d.l(h2, { sw: 14, sc: K.y }) + d.r(196, 280, 48, 84, 0, K.y) + d.r(116, 360, 208, 64, 18, K.n) + d.r(150, 378, 140, 26, 10, K.y, { sw: 6 }) +
@@ -54,22 +54,22 @@
       S.stars([[50, 30, 30, K.y], [400, 300, 24, K.o], [70, 330, 20, K.n]], S.T("pop") + 0.4, { q: 1 });
     } });
 
-  def("signature", { w: 920, h: 260, doc: "اسم البراند كبير وتحته خط (توقيع، خاتمة)", params: "name", cues: { show: 0.5 },
+  def("signature", { plain: true, w: 920, h: 260, doc: "اسم البراند كبير وتحته خط (توقيع، خاتمة)", params: "name", cues: { show: 0.5 },
     build: function (S, p) {
       var K = S.K, C = S.c, n = S.txt(p.name || "", 0, 0, 920, 190, 150, C.ink), u = S.box(250, 196, 420, 26, { bg: C.hi, r: 13, bd: [7, K.l] }), t = S.T("show");
       S.fade(n, t, { y: 40 }); S.sfx("sting", t + 0.05, 0); S.grow(u, t + 0.3, "x", "100% 50%", { d: 0.5 }); S.stars([[150, 40, 30, C.hi], [790, 150, 24, C.hi]], t + 0.4, { q: 1 });
     } });
 
-  def("big_word", { w: 920, h: 460, doc: "كلمة واحدة ضخمة بتخبط الشاشة (الكلمة المفتاح، الرقم، الوعد)", params: "text, sub", cues: { hit: 0.3 },
+  def("big_word", { plain: true, w: 920, h: 460, doc: "كلمة واحدة ضخمة بتخبط الشاشة (الكلمة المفتاح، الرقم، الوعد)", params: "text, sub", cues: { hit: 0.3 },
     build: function (S, p) {
-      var K = S.K, C = S.c, e1 = S.txt(p.text || "", 0, 20, 920, 320, 300, C.hi, { css: "-webkit-text-stroke:20px " + K.l + ";paint-order:stroke fill;" }), t = S.T("hit");
+      var K = S.K, C = S.c, e1 = S.txt(p.text || "", 0, 20, 920, 320, 300, C.hi, { css: "-webkit-text-stroke:20px " + K.l + ";paint-order:stroke fill;" }), t = S.T("hit"); S.await(460, 190, 180, S.t0, t + 0.18);
       S.set(e1, { scale: 2.4, autoAlpha: 0 }); S.to(e1, { scale: 1, autoAlpha: 1, duration: 0.2, ease: "power4.in" }, t);
       S.sfx("hit", t + 0.2, 1); S.sfx("sub", t + 0.2, 0); S.shake(t + 0.2);
       if (p.sub) { var l = S.label(p.sub, 210, 350, 500, 104, K.w, K.l, { size: 56 }); S.pop(l, t + 0.4, { rot0: 8, rot: -3 }); }
       S.to(e1, { scale: 1.05, duration: 1.2, ease: "sine.inOut" }, t + 0.3); S.stars([[70, 60, 34, K.y], [850, 300, 28, K.y]], t + 0.3, { q: 1 });
     } });
 
-  def("checklist", { w: 900, h: 720, doc: "شروط أو مميزات بتدخل واحدة واحدة وتتعلّم صح (شروط الانضمام، المميزات، الخطوات)", params: "items:[{t:'النص', s:'سطر صغير فوقه'}] لحد 3, name (اسم البراند تحتهم)", cues: { first: 0.1, last: 0.8 },
+  def("checklist", { enter: "first", plain: true, w: 900, h: 720, doc: "شروط أو مميزات بتدخل واحدة واحدة وتتعلّم صح (شروط الانضمام، المميزات، الخطوات)", params: "items:[{t:'النص', s:'سطر صغير فوقه'}] لحد 3, name (اسم البراند تحتهم)", cues: { first: 0.1, last: 0.8 },
     build: function (S, p) {
       var d = S.d, K = S.K, C = S.c, it = (p.items || []).slice(0, 3), n = it.length || 1, ts = S.spread(n, S.T("first"), S.T("last")), gap = n === 3 ? 222 : 250, chips = [];
       it.forEach(function (x, i) {
@@ -88,7 +88,7 @@
       function P(S2) { return S2.P.deep; }
     } });
 
-  def("steps", { w: 900, h: 560, doc: "تلات خطوات مرقمة ومتوصلة بخط (إزاي تبدأ، طريقة الطلب)", params: "items:[نص,نص,نص]", cues: { first: 0.1, last: 0.8 },
+  def("steps", { enter: "first", plain: true, w: 900, h: 560, doc: "تلات خطوات مرقمة ومتوصلة بخط (إزاي تبدأ، طريقة الطلب)", params: "items:[نص,نص,نص]", cues: { first: 0.1, last: 0.8 },
     build: function (S, p) {
       var d = S.d, K = S.K, it = (p.items || ["سجّل", "اختار", "استلم"]).slice(0, 3), n = it.length, ts = S.spread(n, S.T("first"), S.T("last")), w = 900 / n, cols = [K.o, K.y, K.n];
       S.part(d.l("M" + (w / 2) + " 144H" + (900 - w / 2), { sw: 12, da: "4 26" }));
@@ -102,7 +102,7 @@
     } });
 
   /* ============ building, growth, ownership ============ */
-  def("building", { w: 700, h: 660, doc: "مبنى بيتبني بلوك بلوك، وبلوك ملوّن بيركب في مكانه (كيان بيبني مشروع وإنت جزء منه، فريق، نظام)", params: "label (اسم البلوك الملوّن), roof:false", cues: { build: 0.05, done: 0.45, fly: 0.6, lock: 0.8 },
+  def("building", { enter: "build", w: 700, h: 660, doc: "مبنى بيتبني بلوك بلوك، وبلوك ملوّن بيركب في مكانه (كيان بيبني مشروع وإنت جزء منه، فريق، نظام)", params: "label (اسم البلوك الملوّن), roof:false", cues: { build: 0.05, done: 0.45, fly: 0.6, lock: 0.8 },
     build: function (S, p) {
       var d = S.d, K = S.K, g = S.grp(0, 0, 700, 660), t0 = S.T("build"), t1 = Math.max(t0 + 0.8, S.T("done")), n = 0;
       S.floor(640, 30, 670, { p: g });
@@ -122,7 +122,7 @@
       S.shake(tk + 0.22, g); S.sfx("hit", tk + 0.22, 0); S.pulse(you, tk + 0.7, 1.2); S.stars([[40, 200, 30, K.y], [660, 60, 24, K.y]], tk + 0.3, { q: 1 });
     } });
 
-  def("gear_tag", { w: 320, h: 330, doc: "ترس بيلف ومعاه اسم (الإدارة، النظام، التشغيل شغّال من غيرك)", params: "label", cues: { pop: 0.2, tag: 0.6 },
+  def("gear_tag", { enter: "pop", w: 320, h: 330, doc: "ترس بيلف ومعاه اسم (الإدارة، النظام، التشغيل شغّال من غيرك)", params: "label", cues: { pop: 0.2, tag: 0.6 },
     build: function (S, p) {
       var d = S.d, K = S.K, pts = [], T = 8;
       for (var i = 0; i < T * 4; i++) { var a = (i + 0.5) * Math.PI / (T * 2), r = (i % 4 < 2) ? 100 : 74; pts.push((160 + Math.cos(a) * r).toFixed(1) + " " + (110 + Math.sin(a) * r).toFixed(1)); }
@@ -150,7 +150,7 @@
       S.stars([[430, 110, 28, K.o], [30, 120, 22, K.y]], ts[n - 1] + 0.25, { q: 1 });
     } });
 
-  def("share_ring", { w: 400, h: 400, doc: "حلقة نسبة بتتملى وفي نصها كلمة (حصتك، نسبتك، حقك)", params: "label, pct (0-100)", cues: { pop: 0.1, fill: 0.5, land: 0.9 },
+  def("share_ring", { enter: "pop", w: 400, h: 400, doc: "حلقة نسبة بتتملى وفي نصها كلمة (حصتك، نسبتك، حقك)", params: "label, pct (0-100)", cues: { pop: 0.1, fill: 0.5, land: 0.9 },
     build: function (S, p) {
       var K = S.K, C = S.c, g = S.grp(0, 0, 400, 400), ring = S.box(0, 0, 400, 400, { r: "50%", bd: [10, K.l], p: g }), pct = p.pct || 40;
       S.box(78, 78, 244, 244, { bg: C.bg, r: "50%", bd: [10, K.l], p: g }); S.txt(p.label || "حقك", 90, 90, 220, 200, 108, C.ink, { p: g });
@@ -188,7 +188,7 @@
       S.sfx("card", t + 0.08, 3); S.sfx("sting", t + 0.2, 0); S.stars([[30, 150, 28, K.y], [396, 660, 24, K.o]], t + 0.35, { q: 1 });
     } });
 
-  def("plant", { w: 340, h: 500, doc: "نبتة في قصرية بتكبر ورقة ورقة (حاجة ليك بتكبر، استثمار، نمو مع الوقت)", params: "", cues: { grow: 0.1, done: 0.9 },
+  def("plant", { enter: "grow", w: 340, h: 500, doc: "نبتة في قصرية بتكبر ورقة ورقة (حاجة ليك بتكبر، استثمار، نمو مع الوقت)", params: "", cues: { grow: 0.1, done: 0.9 },
     build: function (S) {
       var d = S.d, K = S.K, g = S.grp(0, 0, 340, 500), ts = S.spread(4, S.T("grow") + 0.3, S.T("done"));
       S.floor(486, 10, 330, { p: g });
@@ -201,7 +201,7 @@
       S.stars([[40, 80, 26, K.y], [300, 40, 22, K.o]], ts[3] + 0.2, { q: 1 });
     } });
 
-  def("path_to", { w: 920, h: 720, doc: "طريق بيترسم من نقطة البداية لحد اسم البراند (ابدأ رحلتك مع…)", params: "name (اسم البراند، كلمة أو اتنين)", cues: { go: 0.05, name: 0.6, name2: 0.8 },
+  def("path_to", { plain: true, w: 920, h: 720, doc: "طريق بيترسم من نقطة البداية لحد اسم البراند (ابدأ رحلتك مع…)", params: "name (اسم البراند، كلمة أو اتنين)", cues: { go: 0.05, name: 0.6, name2: 0.8 },
     build: function (S, p) {
       var d = S.d, K = S.K, C = S.c, pd = "M70 660C390 660 250 500 480 490S820 500 810 340", parts = String(p.name || "").split(/\s+/).filter(Boolean);
       S.part(d.l(pd, { sw: 10, da: "2 30", op: 0.35 }));
@@ -218,7 +218,7 @@
       S.to(dot, { scale: 1.5, duration: 0.18, yoyo: true, repeat: 1, ease: "power2.out" }, tn + 0.15); S.stars([[860, 240, 30, K.o], [60, 60, 26, K.y]], tl + 0.4, { q: 1 });
     } });
 
-  def("house", { w: 600, h: 560, doc: "بيت بيتبني (عقار، سكن، ملكية، بيتك)", params: "label", cues: { build: 0.1, roof: 0.5, door: 0.8 },
+  def("house", { enter: "build", w: 600, h: 560, doc: "بيت بيتبني (عقار، سكن، ملكية، بيتك)", params: "label", cues: { build: 0.1, roof: 0.5, door: 0.8 },
     build: function (S, p) {
       var d = S.d, K = S.K, g = S.grp(0, 0, 600, 560);
       S.floor(530, 20, 580, { p: g });
@@ -234,7 +234,7 @@
       S.stars([[60, 120, 28, K.y]], S.T("door") + 0.5, { q: 1 });
     } });
 
-  def("key", { w: 520, h: 300, doc: "مفتاح كبير بيدخل ويلف (استلام، ملكية، الحل، الدخول)", params: "", cues: { in: 0.2, turn: 0.7 },
+  def("key", { enter: "in", w: 520, h: 300, doc: "مفتاح كبير بيدخل ويلف (استلام، ملكية، الحل، الدخول)", params: "", cues: { in: 0.2, turn: 0.7 },
     build: function (S) {
       var d = S.d, K = S.K, g = S.org(S.part(d.r(20, 126, 300, 50, 14, K.y) + d.r(44, 172, 50, 74, 10, K.y) + d.r(126, 172, 50, 52, 10, K.y) + d.c(400, 150, 112, K.y) + d.c(400, 150, 44, S.c.bg) + d.l("M330 96a90 90 0 0 1 70-34", { sw: 12, sc: "#FFFFFF", op: 0.7 })), 260, 150);
       S.slide(g, S.T("in"), 900, { s: "whoosh", d: 0.4 }); S.set(g, { rotation: -14 });

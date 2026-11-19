@@ -47,9 +47,13 @@
   };
   /* the text the voice reads: one sentence per beat, markup removed */
   JM.voiceText = function (spec) {
-    return (spec.beats || []).map(function (b) {
-      var s = String(b.text || "").replace(/[|\/\[\]{}*]/g, " ").replace(/\s+/g, " ").trim();
-      return /[.؟!،…]$/.test(s) ? s : s + ".";
+    var beats = spec.beats || [];
+    return beats.map(function (b, i) {
+      var plain = String(b.text || "").replace(/[|\/\[\]{}*]/g, " ").replace(/\s+([،.؟!:])/g, "$1").replace(/\s+/g, " ").trim();
+      var n = plain.split(" ").length, say = String(b.say || "").replace(/\s+/g, " ").trim();
+      var s = say && say.split(" ").length === n ? say : plain;          // the vowelled line is used only if it has the same words
+      if (!/[.؟!،…:]$/.test(s)) s += i === beats.length - 1 ? "." : "،";
+      return s;
     }).join("\n");
   };
 
@@ -178,9 +182,33 @@
         var ox = bx.x + (bx.w - def.w * s) / 2 + (sp.dx || 0), oy = bx.y + (bx.h - def.h * s) / 2 + (sp.dy || 0);
         var wrap = H.mk(layer, "div", "position:absolute;left:" + Math.round(ox) + "px;top:" + Math.round(oy) + "px;width:" + def.w + "px;height:" + def.h + "px");;
         H.set(wrap, { scale: s, transformOrigin: "0% 0%" });
+        if (!def.plain && sp.backdrop !== false) backdrop(b, wrap, def, s, bi + k, b.t0 + k * 0.1);
         var root = H.mk(wrap, "div", "position:absolute;left:0;top:0;width:" + def.w + "px;height:" + def.h + "px");
         var S = sceneApi(b, sp, def, root, k, s);
         try { def.build(S, sp); } catch (e) { if (G.console) G.console.error("scene " + sp.type + ": " + e.message); throw e; }
+      });
+    }
+
+    /* a tinted stage behind a drawing: it is there from the beat's first frame, so the screen is never empty while a
+       drawing waits for its word; small shapes drift around it */
+    function backdrop(b, wrap, def, zoom, n, t) {
+      var c = b.c, cx = def.w / 2, cy = def.h / 2, d = Math.min(Math.max(def.w, def.h) * 1.06, 760 / zoom), dark = b.world === "deep" || b.world === "night";
+      var tint = dark ? "rgba(255,255,255,0.07)" : (b.world === "pop" || b.world === "hot" ? "rgba(255,255,255,0.22)" : rgba(c.hi === c.card ? c.second : c.hi, 0.16));
+      var kinds = ["50%", "38% 62% 55% 45% / 48% 42% 58% 52%", (d * 0.16).toFixed(0) + "px", "62% 38% 44% 56% / 55% 60% 40% 45%"];
+      var g = H.mk(wrap, "div", "position:absolute;left:0;top:0;width:" + def.w + "px;height:" + def.h + "px");
+      var blob = H.mk(g, "div", "position:absolute;left:" + (cx - d / 2).toFixed(0) + "px;top:" + (cy - d / 2).toFixed(0) + "px;width:" + d.toFixed(0) + "px;height:" + d.toFixed(0) + "px;border-radius:" + kinds[n % 4] + ";background:" + tint);
+      H.set(blob, { scale: 0.2, autoAlpha: 0, rotation: n % 2 ? -18 : 14 });
+      H.to(blob, { scale: 1, autoAlpha: 1, rotation: n % 2 ? -6 : 5, duration: 0.5, ease: "back.out(1.6)" }, t);
+      H.to(blob, { rotation: n % 2 ? 6 : -7, scale: 1.05, duration: Math.max(1.2, b.t1 - t - 0.5), ease: "sine.inOut" }, t + 0.5);
+      var cols = [c.hi === c.card ? c.second : c.hi, dark ? "rgba(255,255,255,0.5)" : rgba(c.ink, 0.45), c.second], u = 22 / zoom;
+      [[-0.56, -0.42, 0], [0.58, -0.3, 1], [-0.5, 0.44, 2], [0.52, 0.5, 0], [0.62, 0.08, 1]].forEach(function (q, i) {
+        var x = cx + q[0] * d, y = cy + q[1] * d, e;
+        if (i % 3 === 0) e = H.mk(g, "div", "position:absolute;left:" + (x - u).toFixed(0) + "px;top:" + (y - u).toFixed(0) + "px;width:" + (2 * u).toFixed(0) + "px;height:" + (2 * u).toFixed(0) + "px;border-radius:50%;background:" + cols[q[2]]);
+        else if (i % 3 === 1) e = H.mk(g, "div", "position:absolute;left:" + (x - u).toFixed(0) + "px;top:" + (y - u).toFixed(0) + "px;width:" + (2 * u).toFixed(0) + "px;height:" + (2 * u).toFixed(0) + "px;border-radius:50%;box-sizing:border-box;border:" + (u * 0.42).toFixed(1) + "px solid " + cols[q[2]]);
+        else e = H.mk(g, "div", "position:absolute;left:" + (x - u * 1.3).toFixed(0) + "px;top:" + (y - u * 0.22).toFixed(0) + "px;width:" + (u * 2.6).toFixed(0) + "px;height:" + (u * 0.44).toFixed(1) + "px;border-radius:" + u + "px;background:" + cols[q[2]]);
+        H.set(e, { scale: 0, rotation: i * 40 });
+        H.to(e, { scale: 1, duration: 0.3, ease: "back.out(3)" }, t + 0.12 + i * 0.07);
+        H.to(e, { y: (i % 2 ? 26 : -30) / zoom, x: (i % 2 ? -16 : 20) / zoom, rotation: i * 40 + (i % 2 ? 50 : -40), duration: Math.max(1.2, b.t1 - t - 0.6), ease: "sine.inOut" }, t + 0.45);
       });
     }
 
@@ -199,6 +227,10 @@
       }
       /* cue time: sp.on[name] = "word", "word:end", "word+0.2", 0.5 (share of the beat); else the scene's default share */
       S.T = function (name, dflt) {
+        var raw = S.T0(name, dflt);
+        return (def.enter === name && k === 0 && sp.late !== true) ? Math.min(raw, S.t0 + 0.22) : raw;
+      };
+      S.T0 = function (name, dflt) {
         var v = sp.on && sp.on[name], f = def.cues && def.cues[name];
         if (v == null) v = dflt != null ? dflt : (f != null ? f : 0);
         if (typeof v === "number") { return v <= 0 ? S.t0 + 0.02 : S.wt(Math.round(v * (b.n - 1))) - 0.05; }
@@ -301,6 +333,15 @@
           H.to(e, { scale: 0.72, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 5 }, t + 0.4 + i * 0.13);
         });
         if (!o.q) addSfx("shimmer", t, o.g || 0);
+      };
+      /* a quiet target where an impact will land, so the frame is alive before the hit */
+      S.await = function (cx, cy, r, t0, t1) {
+        var e = S.part(S.d.c(cx, cy, r, "none", { sw: 6, sc: C0.soft, da: "10 22" }), { sh: 0 });
+        H.set(e, { scale: 0.6, autoAlpha: 0, transformOrigin: cx + "px " + cy + "px" });
+        H.to(e, { scale: 1, autoAlpha: 1, duration: 0.35, ease: "back.out(2)" }, t0);
+        H.to(e, { rotation: 90, duration: Math.max(0.3, t1 - t0), ease: "none" }, t0);
+        H.to(e, { scale: 1.25, autoAlpha: 0, duration: 0.14, ease: "power2.in" }, t1 - 0.06);
+        return e;
       };
       S.org = function (el, x, y) { H.set(el, { transformOrigin: x + "px " + y + "px" }); return el; };
       S.q = function (el, sel) { return H.q(el, sel); };

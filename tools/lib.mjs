@@ -33,7 +33,7 @@ export function encode(file, data, ch = 1, extra = []) {
 /* ---------- Gemini TTS: one take for the whole script ---------- */
 export const VOICE_STYLE = `# AUDIO PROFILE: Karim, a 32-year-old Egyptian guy from Cairo, a real person not an announcer.
 # SCENE: He is talking to a close friend at a cafe in Cairo about something he believes in.
-# DIRECTOR'S NOTES: Authentic Cairene Egyptian colloquial Arabic (Masri) only, never Modern Standard Arabic and never Gulf accent. Pronounce ج as hard g, ق as a glottal stop where Egyptians do. Natural, relaxed, confident, a little smile in the voice. Fast natural flow like real speech, words connected, no robotic pauses, no dramatic announcer tone.
+# DIRECTOR'S NOTES: Authentic Cairene Egyptian colloquial Arabic (Masri) only, never Modern Standard Arabic and never Gulf accent. Pronounce ج as hard g, ق as a glottal stop where Egyptians do. Natural, relaxed, confident, a little smile in the voice. Fast natural flow like real speech, words connected, no robotic pauses, no dramatic announcer tone. Read the transcript exactly as written: every word, in order, nothing added. Where a word carries diacritics, pronounce it exactly as they say. Keep it one flowing take: a comma is a tiny breath, not a stop.
 # TRANSCRIPT:`;
 export async function tts(text, out, { voice = "Puck", model = "gemini-3.8-flash-tts", style = VOICE_STYLE } = {}) {
   let key = process.env.GEMINI_API_KEY;

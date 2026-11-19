@@ -40,7 +40,7 @@
       S.to(b1, { height: 232, duration: 0.5, ease: "power1.inOut" }, th + 0.4);
     } });
 
-  def("counter", { w: 680, h: 440, doc: "رقم كبير بيعدّ لحد قيمته (نسبة، عدد عملاء، مبلغ)", params: "from, to, prefix, suffix, label", cues: { count: 0.2, land: 0.8 },
+  def("counter", { plain: true, w: 680, h: 440, doc: "رقم كبير بيعدّ لحد قيمته (نسبة، عدد عملاء، مبلغ)", params: "from, to, prefix, suffix, label", cues: { count: 0.2, land: 0.8 },
     build: function (S, p) {
       var d = S.d, K = S.K, to = p.to == null ? 100 : p.to, pre = p.prefix || "", suf = p.suffix || "", g = S.grp(0, 0, 680, 440);
       S.part(d.r(20, 30, 640, 290, 50, K.n) + d.r(46, 56, 588, 238, 30, "none", { sw: 6, sc: K.c, da: "4 20" }) + d.c(74, 84, 10, K.y, { s: 0 }) + d.c(606, 84, 10, K.y, { s: 0 }), { p: g });
@@ -54,20 +54,20 @@
       S.stars([[60, 10, 30, K.y], [640, 360, 24, K.o]], tl + 0.15, { q: 1 });
     } });
 
-  def("percent", { w: 520, h: 520, doc: "ختم خصم أو نسبة بيلف ويخبط (عرض، خصم، عمولة)", params: "value:'50%', label", cues: { hit: 0.4 },
+  def("percent", { plain: true, w: 520, h: 520, doc: "ختم خصم أو نسبة بيلف ويخبط (عرض، خصم، عمولة)", params: "value:'50%', label", cues: { hit: 0.4 },
     build: function (S, p) {
       var d = S.d, K = S.K, g = S.grp(0, 0, 520, 520), pts = [];
       for (var i = 0; i < 28; i++) { var a = i * Math.PI / 14, r = i % 2 ? 212 : 248; pts.push((260 + Math.sin(a) * r).toFixed(1) + " " + (260 - Math.cos(a) * r).toFixed(1)); }
       S.part(d.p("M" + pts.join("L") + "z", K.o) + d.c(260, 260, 176, "none", { sw: 6, da: "4 20" }), { p: g });
       S.txt(p.value || "50%", 50, 120, 420, 200, 200, K.l, { p: g }); S.txt(p.label || "خصم", 100, 300, 320, 100, 74, K.l, { p: g });
-      var t = S.T("hit");
+      var t = S.T("hit"); S.await(260, 260, 230, S.t0, t + 0.22);
       S.set(g, { scale: 2.4, autoAlpha: 0, rotation: 40 });
       S.to(g, { scale: 1, autoAlpha: 1, rotation: -10, duration: 0.24, ease: "power4.in" }, t); S.sfx("stamp", t + 0.24, 0); S.sfx("sub", t + 0.24, 0); S.shake(t + 0.24);
       S.to(g, { rotation: -4, scale: 1.05, duration: 0.9, ease: "sine.inOut", yoyo: true, repeat: 3 }, t + 0.4);
       S.stars([[40, 60, 30, K.y], [480, 470, 26, K.y]], t + 0.3, { q: 1 });
     } });
 
-  def("coins", { w: 460, h: 520, doc: "عملات بتترص فوق بعض (فلوس بتتجمع، دخل بيزيد)", params: "n (3-7), label", cues: { stack: 0.15, land: 0.9 },
+  def("coins", { enter: "stack", w: 460, h: 520, doc: "عملات بتترص فوق بعض (فلوس بتتجمع، دخل بيزيد)", params: "n (3-7), label", cues: { stack: 0.15, land: 0.9 },
     build: function (S, p) {
       var d = S.d, K = S.K, n = Math.max(3, Math.min(7, p.n || 5)), ts = S.spread(n, S.T("stack"), S.T("land"));
       S.floor(486, 20, 440);
@@ -149,7 +149,7 @@
       }
     } });
 
-  def("idea_card", { w: 420, h: 380, doc: "كارت صغير فيه نبتة واسم (فكرة جديدة، حاجة ليك، بداية صغيرة)", params: "label", cues: { pop: 0.2, grow: 0.5, name: 0.8 },
+  def("idea_card", { enter: "pop", w: 420, h: 380, doc: "كارت صغير فيه نبتة واسم (فكرة جديدة، حاجة ليك، بداية صغيرة)", params: "label", cues: { pop: 0.2, grow: 0.5, name: 0.8 },
     build: function (S, p) {
       var d = S.d, K = S.K, g = S.grp(0, 0, 420, 380);
       S.part(d.r(14, 14, 392, 352, 42, K.w) + d.r(344, 20, 56, 340, 0, K.sh, { s: 0 }) + d.r(14, 14, 392, 352, 42, "none") + d.p("M140 236a70 34 0 0 1 140 0z", K.n) + d.l("M210 206V120"), { p: g });
@@ -162,7 +162,7 @@
       S.fade(tx, S.T("name")); S.pulse(g, S.T("name") + 0.25, 1.1); S.stars([[384, 30, 26, K.y]], S.T("name") + 0.2, { q: 1 });
     } });
 
-  def("people", { w: 760, h: 440, doc: "ناس بتزيد واحد ورا التاني (عملاء، فريق، جمهور)", params: "n (3-7), label", cues: { grow: 0.1, done: 0.85 },
+  def("people", { enter: "grow", w: 760, h: 440, doc: "ناس بتزيد واحد ورا التاني (عملاء، فريق، جمهور)", params: "n (3-7), label", cues: { grow: 0.1, done: 0.85 },
     build: function (S, p) {
       var d = S.d, K = S.K, n = Math.max(3, Math.min(7, p.n || 5)), ts = S.spread(n, S.T("grow"), S.T("done")), w = 660 / n, k = Math.min(1, w / 150);
       for (var i = 0; i < n; i++) {
@@ -174,7 +174,7 @@
       if (p.label) { var l = S.label(p.label, 230, 0, 300, 92, K.y, K.l); S.pop(l, ts[n - 1] + 0.2, { rot0: -8, rot: -3, s: "mallet" }); }
     } });
 
-  def("chat", { w: 780, h: 640, doc: "رسايل شات بتظهر ورا بعض (استفسار عميل، رد، حوار)", params: "items:[نص,نص,نص]", cues: { first: 0.1, last: 0.85 },
+  def("chat", { enter: "first", plain: true, w: 780, h: 640, doc: "رسايل شات بتظهر ورا بعض (استفسار عميل، رد، حوار)", params: "items:[نص,نص,نص]", cues: { first: 0.1, last: 0.85 },
     build: function (S, p) {
       var d = S.d, K = S.K, it = (p.items || ["السعر كام؟", "ابعتلي التفاصيل", "تمام، احجزلي"]).slice(0, 3), ts = S.spread(it.length, S.T("first"), S.T("last"));
       it.forEach(function (tx, i) {
@@ -243,7 +243,7 @@
       S.to(saw, { rotation: 17, duration: 0.3, ease: "sine.inOut", yoyo: true, repeat: 1 }, S.T("settle")); S.sfx("thud", S.T("settle"), -5);
     } });
 
-  def("glyph", { w: 340, h: 420, doc: "علامة كبيرة بتنط (؟ للسؤال، ! للتنبيه)", params: "ch:'؟'", cues: { pop: 0.3, again: 0.9 },
+  def("glyph", { enter: "pop", w: 340, h: 420, doc: "علامة كبيرة بتنط (؟ للسؤال، ! للتنبيه)", params: "ch:'؟'", cues: { pop: 0.3, again: 0.9 },
     build: function (S, p) {
       var d = S.d, K = S.K, rays = S.part(d.l("M40 70l40 40M300 70l-40 40M20 220h50M270 220h50", { sw: 12 })), g = S.txt(p.ch || "؟", 0, 0, 340, 420, 330, K.o, { css: "-webkit-text-stroke:18px " + K.l + ";paint-order:stroke fill;" });
       S.set(rays, { scale: 0.4, autoAlpha: 0, transformOrigin: "170px 220px" });
@@ -251,7 +251,7 @@
       S.to(g, { scale: 1.2, rotation: 8, duration: 0.3, ease: "back.out(2)" }, S.T("again"));
     } });
 
-  def("compare", { w: 900, h: 560, doc: "كارتين: الغلط قصاد الصح (قبل وبعد، الطريقة القديمة والجديدة)", params: "a (الغلط), b (الصح)", cues: { a: 0.1, b: 0.6 },
+  def("compare", { enter: "a", plain: true, w: 900, h: 560, doc: "كارتين: الغلط قصاد الصح (قبل وبعد، الطريقة القديمة والجديدة)", params: "a (الغلط), b (الصح)", cues: { a: 0.1, b: 0.6 },
     build: function (S, p) {
       var d = S.d, K = S.K, a = S.grp(470, 60, 400, 480), b = S.grp(30, 60, 400, 480);
       S.box(0, 0, 400, 480, { bg: K.w, r: 44, bd: [10, K.l], p: a }); S.box(0, 0, 400, 480, { bg: K.n, r: 44, bd: [10, K.l], p: b });
