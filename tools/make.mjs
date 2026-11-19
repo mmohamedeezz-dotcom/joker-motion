@@ -65,7 +65,7 @@ fs.writeFileSync(path.join(job, "spec.js"), "window.JM_SPEC = " + JSON.stringify
 const plan = JM.mount(JM.stubHost(), spec, al.words), dur = +plan.end.toFixed(2);
 const mx = mix(al.audio, plan.sfx, plan.end), lv = master(path.join(job, "assets/mix.wav"), mx.audio);
 fs.writeFileSync(path.join(job, "sound.json"), JSON.stringify({ duration: dur, loudness: lv, effects: mx.used }, null, 1));
-lap("sound mixed: " + mx.used.length + " effects, " + JSON.stringify(lv));
+lap("sound mixed: " + mx.used.length + " of " + mx.asked + " cues kept, " + (mx.used.length / dur).toFixed(2) + "/s, " + JSON.stringify(lv));
 
 for (const f of ["index.html"]) fs.writeFileSync(path.join(job, f), fs.readFileSync(path.join(job, f), "utf8").replaceAll("__DUR__", String(dur)));
 

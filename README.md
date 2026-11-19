@@ -11,4 +11,4 @@ node tools/make.mjs specs/gamb-shoghlak.json --voice samples/gamb-shoghlak.wav -
 - `tools/make.mjs` صوت (Gemini TTS أو ملف جاهز) ← توقيت الكلمات ← مكساج ← رندر (HyperFrames 0.8.225).
 - `.github/workflows/render.yml` رندر سحابي: `workflow_dispatch` بـ `job_id` و`spec_b64`، والنتيجة في release اسمه `renders`.
 
-التراخيص: الخطوط Lalezar و Alexandria (OFL)، المؤثرات متولدة بـ Earshot 0.4.0 (MIT)، GSAP 3.15 (رخصة GreenSock المجانية)، HyperFrames (Apache-2.0).
+التراخيص: الخطوط Lalezar و Alexandria (OFL)، المؤثرات 944 صوت: تسجيلات حقيقية من باقات Kenney (CC0) + أصوات موشن متولدة بـ Earshot 0.4.0 (MIT)، والرسومات الاحتياطية Phosphor (MIT)، GSAP 3.15 (رخصة GreenSock المجانية)، HyperFrames (Apache-2.0).

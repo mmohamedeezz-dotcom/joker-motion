@@ -114,67 +114,99 @@ export function alignAndTighten(x, words, holds = new Set()) {
   return { audio, words: timed, stats: { spans: K, wps: +(N / spoken).toFixed(2), seconds: +(pos / SR).toFixed(2) } };
 }
 
-/* ---------- sound effects ---------- */
-// kind -> [base gain dB, anchor, files…]; files live in sfx/<family>/<family> <name>.wav
-export const SFX = {
-  pop: [-4, "attack", "pop in/pro_pop_in airy 01", "pop in/pro_pop_in round 01", "pop in/pro_pop_in double 01", "pop in/pro_pop_in airy 02", "pop in/pro_pop_in round 02"],
-  pop_big: [-3, "attack", "pop in/pro_pop_in deep 01", "pop in/pro_pop_in knock 01", "pop in/pro_pop_in deep 02", "pop in/pro_pop_in knock 02"],
-  blip: [-8, "attack", "pop ui/ui_pop blip 01", "pop ui/ui_pop blip 02", "pop ui/ui_pop step 01", "pop ui/ui_pop step 02", "pop ui/ui_pop boop 01", "pop ui/ui_pop boop 02"],
-  boop: [-6, "attack", "pop/pro_pop boop 01", "pop/pro_pop thup 01", "pop/pop 1 01", "pop/pop 3 01", "pop/pro_pop boop 02"],
-  tick: [-9, "attack", "click tick/pro_hover_tick detent 01", "click tick/pro_hover_tick detent 02", "click tick/hover_tick mid 01", "click tick/hover_tick mid 02"],
-  tap: [-8, "attack", "click tap/pro_tap knock 01", "click tap/pro_tap knock 02", "click tap/fit finger_wood 01", "click tap/fit finger_wood 02", "click tap/pro_tap double 01", "click tap/fit fingertip_book 01"],
-  toggle: [-8, "attack", "click toggle/toggle latch 01", "click toggle/toggle latch 02", "click toggle/toggle on 01"],
-  key: [-10, "attack", "typing key/fit thock 01", "typing key/fit thock 02", "typing key/fit medium 01", "typing key/fit medium 02", "typing key/fit lubed 01"],
-  whoosh: [-7, "peak", "whoosh fast/whoosh_fast crisp 01", "whoosh fast/whoosh_fast tight 01", "whoosh fast/whoosh_fast whip 01", "whoosh fast/whoosh_fast heavy 01", "whoosh fast/whoosh_fast crisp 02"],
-  swipe: [-8, "peak", "whoosh swipe/swipe flick 01", "whoosh swipe/swipe paper 01", "whoosh swipe/swipe glide 01", "whoosh swipe/swipe cloth 01", "whoosh swipe/swipe flick 02", "whoosh swipe/swipe glide 02"],
-  swish: [-7, "peak", "whoosh swish/swish bright 01", "whoosh swish/swish zing 01", "whoosh swish/swish soft 01"],
-  wipe: [-4, "peak", "whoosh big/pro_whoosh_big long 01", "whoosh big/pro_whoosh_big tonal 01", "whoosh big/pro_whoosh_big swell 01", "whoosh big/pro_whoosh_big windy 01"],
-  hit: [0, "attack", "impact cut hit/cut_hit punch 01", "impact cut hit/cut_hit kick 01", "impact cut hit/cut_hit punch 02"],
-  thud: [-3, "attack", "impact knock thud/knock desk 01", "impact knock thud/knock wood 02", "impact knock thud/knock double 01", "impact knock thud/knock snap 01", "impact knock thud/knock plastic 01"],
-  sub: [-5, "attack", "sub drop/pro_sub_drop quick 01", "sub drop/pro_sub_drop quick 02"],
-  shimmer: [-8, "attack", "chime shimmer sparkle/pro_shimmer m1 01", "chime shimmer sparkle/pro_shimmer m2 01"],
-  ding: [-5, "attack", "chime notification ding/pro_notify ding_1930 01", "chime notification ding/pro_notify ding_2296 01", "chime notification ding/pro_notify ding_2045 01"],
-  mallet: [-5, "attack", "chime mallet/mallet up4 01", "chime mallet/mallet glock 01", "chime mallet/mallet marimba 01"],
-  sting: [-2, "attack", "chime logo sting/logo_sting spark 01", "chime logo sting/logo_sting soft_bloom 01"],
-  swell: [-9, "peak", "riser reverse swell/reverse_swell short 01", "riser reverse swell/reverse_swell short 02"]
+/* ---------- sound effects ----------
+   A kind is a role, not a file: every kind draws from a pool in the library (sfx/index.json, 944 measured sounds).
+   g = level in dB (after loudness matching), pr = priority when moments collide (3 = the beat's main hit … 0 = decoration),
+   at = "peak" for sounds that swell to the move, max = longest file allowed. */
+export const KINDS = {
+  // designed motion sounds (Earshot)
+  whoosh: { g: -13, pr: 1, at: "peak", re: /^earshot\/whoosh fast\/whoosh_fast (crisp|tight|whip|sleeve)/ },
+  swipe: { g: -14, pr: 0, at: "peak", re: /^earshot\/whoosh swipe\// },
+  swish: { g: -13, pr: 0, at: "peak", re: /^earshot\/whoosh swish\/swish (bright|soft|flick|zing)/ },
+  wipe: { g: -9, pr: 2, at: "peak", re: /^earshot\/whoosh big\/pro_whoosh_big (long|tonal|swell|windy)/ },
+  swell: { g: -14, pr: 1, at: "peak", re: /^earshot\/riser reverse swell\/reverse_swell short/ },
+  pop: { g: -10, pr: 1, re: /^earshot\/pop in\/pro_pop_in (airy|round|double)/ },
+  pop_big: { g: -8, pr: 2, re: /^earshot\/pop in\/pro_pop_in (deep|knock)/ },
+  blip: { g: -15, pr: 0, re: /^earshot\/pop ui\/|^kenney\/interface\/select_/ },
+  boop: { g: -12, pr: 0, re: /^earshot\/pop\/(pro_pop (boop|thup)|pop [013])/ },
+  hit: { g: -4, pr: 3, re: /^earshot\/impact cut hit\/cut_hit (punch|kick)/ },
+  sub: { g: -9, pr: 2, re: /^earshot\/sub drop\/pro_sub_drop quick/ },
+  shimmer: { g: -15, pr: 0, re: /^earshot\/chime shimmer sparkle\/pro_shimmer m[12]/, max: 3.2 },
+  mallet: { g: -11, pr: 1, re: /^earshot\/chime mallet\/mallet (up4|glock|marimba|celesta)/ },
+  sting: { g: -7, pr: 3, re: /^earshot\/chime logo sting\/logo_sting (spark|soft_bloom)/ },
+  key: { g: -16, pr: 0, re: /^earshot\/typing key\/fit / },
+  // interface (Kenney)
+  tick: { g: -15, pr: 0, re: /^kenney\/ui\/(rollover|click)\d|^kenney\/interface\/tick_/ },
+  toggle: { g: -10, pr: 1, re: /^kenney\/ui\/switch(1|2|3|7|13|21)\.|^kenney\/interface\/(switch|toggle)_/ },
+  ding: { g: -10, pr: 2, re: /^kenney\/interface\/confirmation_|^earshot\/chime notification ding\// },
+  error: { g: -10, pr: 2, re: /^kenney\/interface\/error_00[1-4]/ },
+  drop: { g: -12, pr: 1, re: /^kenney\/interface\/drop_/ },
+  grow: { g: -14, pr: 0, re: /^kenney\/interface\/maximize_/ },
+  // real recordings (Kenney): the thing you see is the thing you hear
+  tap: { g: -11, pr: 1, re: /^kenney\/impact\/impactWood_light|^kenney\/rpg\/bookPlace/ },
+  thud: { g: -8, pr: 2, re: /^kenney\/impact\/impactWood_(medium|heavy)|^kenney\/impact\/impactPlank_medium/ },
+  stamp: { g: -4, pr: 3, re: /^kenney\/impact\/impactPunch_heavy|^kenney\/impact\/impactSoft_heavy/ },
+  coin: { g: -9, pr: 2, re: /^kenney\/casino\/(chip-lay|chips-stack|chips-collide)/ },
+  coins: { g: -9, pr: 2, re: /^kenney\/rpg\/handleCoins/ },
+  card: { g: -10, pr: 2, re: /^kenney\/casino\/card-(place|slide|shove)/ },
+  paper: { g: -9, pr: 2, re: /^kenney\/rpg\/bookFlip|^kenney\/casino\/card-fan/ },
+  cloth: { g: -11, pr: 1, re: /^kenney\/rpg\/cloth\d/ },
+  leather: { g: -9, pr: 2, re: /^kenney\/rpg\/(dropLeather|handleSmallLeather|beltHandle)/ },
+  door: { g: -8, pr: 2, re: /^kenney\/rpg\/doorOpen/ },
+  latch: { g: -8, pr: 2, re: /^kenney\/rpg\/(metalLatch|metalClick)/ },
+  metal: { g: -9, pr: 2, re: /^kenney\/impact\/impactMetal_(light|medium)/ },
+  bell: { g: -9, pr: 2, re: /^kenney\/impact\/impactBell_heavy/ },
+  glass: { g: -12, pr: 1, re: /^kenney\/interface\/glass_|^kenney\/impact\/impactGlass_light/ },
+  plate: { g: -10, pr: 1, re: /^kenney\/foley\/platesHit/ },
+  box: { g: -9, pr: 2, re: /^kenney\/casino\/cards-pack-(open|take-out)/ }
 };
-const cache = new Map();
-function sound(rel) {
-  if (!cache.has(rel)) {
-    const fam = rel.split("/")[0], f = path.join(ROOT, "sfx", fam, fam + " " + rel.split("/")[1] + ".wav");
-    if (!fs.existsSync(f)) throw new Error("missing sound " + f);
-    cache.set(rel, decode(f, 2));
-  }
-  return cache.get(rel);
+let INDEX = null; const pools = {}, cache = new Map();
+function pool(kind) {
+  if (!INDEX) INDEX = JSON.parse(fs.readFileSync(path.join(ROOT, "sfx/index.json"), "utf8"));
+  if (!pools[kind]) { const k = KINDS[kind]; pools[kind] = Object.keys(INDEX).filter((f) => k.re.test(f) && INDEX[f].d <= (k.max || 1.6)).sort(); }
+  return pools[kind];
+}
+function sound(rel) { if (!cache.has(rel)) cache.set(rel, decode(path.join(ROOT, "sfx", rel), 2)); return cache.get(rel); }
+
+/** which cues survive: the important sound wins a crowded moment, decoration thins out */
+export function thin(cues) {
+  const kept = [], LIMIT = [2, 3, 4, 99];
+  cues.filter((c) => KINDS[c.kind]).map((c, i) => ({ ...c, pr: KINDS[c.kind].pr, i })).sort((a, b) => b.pr - a.pr || a.t - b.t || a.i - b.i).forEach((c) => {
+    if (kept.some((k) => k.kind === c.kind && Math.abs(k.t - c.t) < 0.09)) return;
+    if (kept.filter((k) => Math.abs(k.t - c.t) < 0.11).length >= 2) return;
+    if (kept.filter((k) => Math.abs(k.t - c.t) < 0.75).length >= LIMIT[c.pr]) return;
+    kept.push(c);
+  });
+  return kept.sort((a, b) => a.t - b.t);
 }
 
-/** voice (mono Float32Array), cues [{t, kind, gain}], end (s) -> stereo Float32Array (interleaved), ducked 6 dB under speech */
+/** voice (mono Float32Array), cues [{t, kind, gain}], end (s) -> stereo Float32Array (interleaved), effects ducked under speech */
 export function mix(voice, cues, end) {
-  const N = Math.round(end * SR), sfx = new Float32Array(N * 2), turn = {}, last = {}, used = [];
-  cues.slice().sort((a, b) => a.t - b.t).forEach((c) => {
-    const d = SFX[c.kind]; if (!d) return;
-    if (last[c.kind] != null && c.t - last[c.kind] < 0.07) return;       // two of the same sound on one frame read as a flam
-    last[c.kind] = c.t;
-    const files = d.slice(2), rel = files[(turn[c.kind] = (turn[c.kind] || 0) + 1) % files.length], y = sound(rel), n = y.length >> 1;
-    let pk = 0, pi = 0; for (let i = 0; i < n; i++) { const a = Math.max(Math.abs(y[2 * i]), Math.abs(y[2 * i + 1])); if (a > pk) { pk = a; pi = i; } }
-    if (!pk) return;
-    let anchor = pi; if (d[1] !== "peak") { for (let i = 0; i < n; i++) if (Math.max(Math.abs(y[2 * i]), Math.abs(y[2 * i + 1])) >= pk * 0.5) { anchor = i; break; } }
-    const g = Math.pow(10, (d[0] + Math.max(-9, Math.min(4, c.gain || 0)) - 4) / 20) / pk, s0 = Math.round(c.t * SR) - anchor, fade = Math.round(0.03 * SR);
-    for (let i = Math.max(0, -s0); i < n && s0 + i < N; i++) {
-      const tail = Math.min(1, (Math.min(n, N - s0) - i) / fade), o = (s0 + i) * 2;
-      sfx[o] += y[2 * i] * g * tail; sfx[o + 1] += y[2 * i + 1] * g * tail;
+  const N = Math.round(end * SR), sfx = new Float32Array(N * 2), low = new Float32Array(N * 2), turn = {}, used = [];
+  thin(cues).forEach((c) => {
+    const k = KINDS[c.kind], files = pool(c.kind); if (!files.length) return;
+    const rel = files[(turn[c.kind] = (turn[c.kind] || 0) + 1) % files.length], m = INDEX[rel], y = sound(rel), n = y.length >> 1;
+    // loudness-matched on the loudest 50 ms, then the kind's level; never above a safe peak
+    const g = Math.min(0.22 / m.r, 0.9 / m.pk) * Math.pow(10, (k.g + Math.max(-6, Math.min(4, c.gain || 0)) * 0.6) / 20);
+    const first = Math.round(m.s * SR), anchor = first + (k.at === "peak" ? Math.round(m.pt * SR) : 0), last = Math.min(n, first + Math.round((m.d + 0.06) * SR));
+    const s0 = Math.round(c.t * SR) - anchor, fade = Math.round(0.04 * SR), bus = k.pr === 0 ? low : sfx;
+    for (let i = Math.max(first, -s0); i < last && s0 + i < N; i++) {
+      const tail = Math.min(1, (Math.min(last, N - s0) - i) / fade), o = (s0 + i) * 2;
+      bus[o] += y[2 * i] * g * tail; bus[o + 1] += y[2 * i + 1] * g * tail;
     }
-    used.push({ t: c.t, sound: rel, kind: c.kind });
+    used.push({ t: c.t, kind: c.kind, sound: rel });
   });
-  // voice to -3 dBFS peak, effects ducked under every spoken word
   let vp = 0; for (let i = 0; i < voice.length; i++) vp = Math.max(vp, Math.abs(voice[i]));
-  const vg = Math.pow(10, -3 / 20) / Math.max(1e-6, vp), win = Math.round(0.03 * SR), k = Math.round(0.06 * SR), act = new Float32Array(N);
-  let acc = 0; const env = new Float32Array(N);
+  const vg = Math.pow(10, -3 / 20) / Math.max(1e-6, vp), win = Math.round(0.03 * SR), kk = Math.round(0.08 * SR), act = new Float32Array(N), env = new Float32Array(N);
+  let acc = 0;
   for (let i = 0; i < N; i++) { acc += Math.abs(voice[i] || 0) * vg; if (i >= win) acc -= Math.abs(voice[i - win] || 0) * vg; env[i] = acc / win; }
-  acc = 0; for (let i = 0; i < N; i++) { acc += env[i] > 0.02 ? 1 : 0; if (i >= k) acc -= env[i - k] > 0.02 ? 1 : 0; act[i] = Math.min(1, acc / k); }
+  acc = 0; for (let i = 0; i < N; i++) { acc += env[i] > 0.02 ? 1 : 0; if (i >= kk) acc -= env[i - kk] > 0.02 ? 1 : 0; act[i] = Math.min(1, acc / kk); }
   const out = new Float32Array(N * 2);
-  for (let i = 0; i < N; i++) { const d = Math.pow(10, -6 * act[i] / 20), v = (voice[i] || 0) * vg; out[2 * i] = v + sfx[2 * i] * d; out[2 * i + 1] = v + sfx[2 * i + 1] * d; }
-  return { audio: out, used };
+  for (let i = 0; i < N; i++) {
+    const d = Math.pow(10, -7 * act[i] / 20), d0 = Math.pow(10, -11 * act[i] / 20), v = (voice[i] || 0) * vg;
+    out[2 * i] = v + sfx[2 * i] * d + low[2 * i] * d0; out[2 * i + 1] = v + sfx[2 * i + 1] * d + low[2 * i + 1] * d0;
+  }
+  return { audio: out, used, asked: cues.length };
 }
 
 /** write the mix at -14 LUFS with a true ceiling (plain gain + limiter, not single-pass loudnorm) */

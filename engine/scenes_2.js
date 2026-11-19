@@ -10,7 +10,7 @@
       S.txt(p.a || "", 110, 110, 400, 210, 176, col, { p: g }); var b = S.txt(p.b || "", 110, 296, 400, 210, 176, C.ink, { p: g });
       S.set(g, { scale: 2.2, autoAlpha: 0, rotation: 14 }); S.set(b, { autoAlpha: 0, scale: 0.6 });
       var t = S.T("hit");
-      S.to(g, { scale: 1, autoAlpha: 1, rotation: -8, duration: 0.22, ease: "power4.in" }, t); S.shake(t + 0.22); S.sfx("hit", t + 0.22, 1); S.sfx("sub", t + 0.22, 0);
+      S.to(g, { scale: 1, autoAlpha: 1, rotation: -8, duration: 0.22, ease: "power4.in" }, t); S.shake(t + 0.22); S.sfx("stamp", t + 0.22, 1); S.sfx("sub", t + 0.22, 0);
       S.to(b, { autoAlpha: 1, scale: 1, duration: 0.26, ease: "back.out(2.6)" }, S.T("second")); S.sfx("shimmer", S.T("second"), 0);
       for (var r = 0; r < 12; r++) {
         var ray = S.box(-9, -9, 18, 70, { bg: col, r: 9, p: rays }), a = r * 30 * Math.PI / 180;
@@ -49,7 +49,7 @@
       S.part(d.l(h1, { sw: 34 }) + d.l(h1, { sw: 14, sc: K.y }) + d.l(h2, { sw: 34 }) + d.l(h2, { sw: 14, sc: K.y }) + d.r(196, 280, 48, 84, 0, K.y) + d.r(116, 360, 208, 64, 18, K.n) + d.r(150, 378, 140, 26, 10, K.y, { sw: 6 }) +
         d.p("M106 34H334V176Q334 290 220 290Q106 290 106 176Z", K.y) + d.p("M286 40h42V176Q328 262 258 282Q286 240 286 176z", "#FFFFFF", { s: 0, op: 0.35 }) + d.p("M106 34H334V176Q334 290 220 290Q106 290 106 176Z", "none"), { p: g });
       S.txt("١", 150, 60, 140, 190, 150, K.l, { p: g });
-      S.rise(g, S.T("pop"), { y: 500, s: "whoosh" }); S.sfx("sting", S.T("pop") + 0.35, 0); S.sway(g, S.T("pop") + 0.5, 4, { rep: 3 });
+      S.rise(g, S.T("pop"), { y: 500, s: "whoosh" }); S.sfx("bell", S.T("pop") + 0.35, 0); S.sfx("sting", S.T("pop") + 0.5, -2); S.sway(g, S.T("pop") + 0.5, 4, { rep: 3 });
       if (p.label) { var l = S.label(p.label, 60, 440, 320, 96, K.o, K.l); S.pop(l, S.T("pop") + 0.45, {}); }
       S.stars([[50, 30, 30, K.y], [400, 300, 24, K.o], [70, 330, 20, K.n]], S.T("pop") + 0.4, { q: 1 });
     } });
@@ -139,12 +139,12 @@
       var cards = S.grp(0, 0, 460, 480, { p: g });
       S.part(d.r(14, 200, 402, 266, 44, K.n) + d.r(38, 224, 354, 218, 28, "none", { sw: 6, sc: K.c, da: "4 20" }) + d.p("M330 290h100a22 22 0 0 1 22 22v44a22 22 0 0 1-22 22H330a44 44 0 0 1 0-88z", K.y) + d.c(338, 334, 15, K.l, { s: 0 }), { p: g });
       S.txt(p.label || "عملاء", 40, 250, 270, 170, 88, K.c, { p: g });
-      S.rise(g, S.t0, { y: 500 });
+      S.rise(g, S.t0, { y: 500, s: "leather" });
       for (var c = n - 1; c >= 0; c--) {
         var cy = 150 - c * 38, cx = 60 + (c % 2) * 26, f = c % 2 ? K.y : K.w;
         var cd = S.org(S.part(d.r(cx, cy, 320, 180, 20, f) + d.c(cx + 262, cy + 54, 30, c % 2 ? K.w : K.o, { sw: 7 }) + d.l("M" + (cx + 36) + " " + (cy + 44) + "h150M" + (cx + 36) + " " + (cy + 78) + "h90", { sw: 13 }), { p: cards }), cx + 160, cy + 180);
         S.set(cd, { y: -700, rotation: c % 2 ? 16 : -16, autoAlpha: 0 });
-        S.to(cd, { y: 0, rotation: c % 2 ? 4 : -4, autoAlpha: 1, duration: 0.3, ease: "power3.in" }, ts[c] - 0.2); S.sfx("tap", ts[c] + 0.1, 3);
+        S.to(cd, { y: 0, rotation: c % 2 ? 4 : -4, autoAlpha: 1, duration: 0.3, ease: "power3.in" }, ts[c] - 0.2); S.sfx("card", ts[c] + 0.1, 2);
         S.fromTo(g, { scaleY: 1 }, { scaleY: 0.95, duration: 0.08, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, ts[c] + 0.1);
       }
       S.stars([[430, 110, 28, K.o], [30, 120, 22, K.y]], ts[n - 1] + 0.25, { q: 1 });
@@ -166,7 +166,7 @@
       S.part(d.l("M200 16V60", { sw: 8 }) + d.c(200, 16, 12, K.o), { p: g });
       S.box(10, 50, 380, 104, { bg: K.w, r: 22, bd: [9, K.l], p: g }); S.txt(p.label || "", 22, 50, 356, 88, 46, K.l, { p: g, l: 1 });
       S.set(g, { y: -90, rotation: -24, autoAlpha: 0 });
-      S.to(g, { y: 0, rotation: 5, autoAlpha: 1, duration: 0.5, ease: "elastic.out(1,0.5)" }, S.T("drop")); S.sfx("boop", S.T("drop"), 1);
+      S.to(g, { y: 0, rotation: 5, autoAlpha: 1, duration: 0.5, ease: "elastic.out(1,0.5)" }, S.T("drop")); S.sfx("paper", S.T("drop"), 0);
     } });
 
   def("badge_flip", { w: 420, h: 720, doc: "كارنيه بيقلب من كلمة لكلمة ومعاه مفتاح (وظيفة ← تمليك، موظف ← شريك، مستأجر ← مالك)", params: "a, b", cues: { a: 0.3, flip: 0.7 },
@@ -185,7 +185,7 @@
       S.to(fa, { scale: 1.08, duration: 0.14, yoyo: true, repeat: 1, ease: "power2.out" }, S.T("a"));
       var t = S.T("flip") - 0.05;
       S.to(fa, { scaleX: 0, duration: 0.12, ease: "power2.in" }, t); S.tsetv(fb, t + 0.12); S.to(fb, { scaleX: 1, duration: 0.3, ease: "back.out(2.4)" }, t + 0.12);
-      S.sfx("swipe", t + 0.08, 3); S.sfx("sting", t + 0.2, 0); S.stars([[30, 150, 28, K.y], [396, 660, 24, K.o]], t + 0.35, { q: 1 });
+      S.sfx("card", t + 0.08, 3); S.sfx("sting", t + 0.2, 0); S.stars([[30, 150, 28, K.y], [396, 660, 24, K.o]], t + 0.35, { q: 1 });
     } });
 
   def("plant", { w: 340, h: 500, doc: "نبتة في قصرية بتكبر ورقة ورقة (حاجة ليك بتكبر، استثمار، نمو مع الوقت)", params: "", cues: { grow: 0.1, done: 0.9 },
@@ -238,7 +238,7 @@
     build: function (S) {
       var d = S.d, K = S.K, g = S.org(S.part(d.r(20, 126, 300, 50, 14, K.y) + d.r(44, 172, 50, 74, 10, K.y) + d.r(126, 172, 50, 52, 10, K.y) + d.c(400, 150, 112, K.y) + d.c(400, 150, 44, S.c.bg) + d.l("M330 96a90 90 0 0 1 70-34", { sw: 12, sc: "#FFFFFF", op: 0.7 })), 260, 150);
       S.slide(g, S.T("in"), 900, { s: "whoosh", d: 0.4 }); S.set(g, { rotation: -14 });
-      S.to(g, { rotation: 20, duration: 0.3, ease: "back.out(3)" }, S.T("turn")); S.sfx("toggle", S.T("turn"), 3); S.sfx("sting", S.T("turn") + 0.15, -1); S.stars([[60, 50, 28, K.o], [480, 280, 22, K.y]], S.T("turn") + 0.2, { q: 1 });
+      S.to(g, { rotation: 20, duration: 0.3, ease: "back.out(3)" }, S.T("turn")); S.sfx("latch", S.T("turn"), 3); S.sfx("sting", S.T("turn") + 0.15, -1); S.stars([[60, 50, 28, K.o], [480, 280, 22, K.y]], S.T("turn") + 0.2, { q: 1 });
     } });
 
   def("lock", { w: 400, h: 500, doc: "قفل بيتفتح (فرصة اتفتحت، وصول، سر، حماية بيانات)", params: "open:false لو بيتقفل", cues: { act: 0.5 },
@@ -247,8 +247,8 @@
       var g = S.org(S.part(d.r(30, 220, 340, 270, 50, K.y) + d.r(306, 226, 58, 258, 0, "#000000", { s: 0, op: 0.12 }) + d.r(30, 220, 340, 270, 50, "none") + d.c(200, 330, 36, K.l, { s: 0 }) + d.r(184, 340, 32, 80, 12, K.l, { s: 0 }) + d.l("M64 262h70", { sw: 9, sc: "#FFFFFF", op: 0.7 })), 200, 355);
       S.pop(S.root, S.t0, { from: 0.5 });
       var t = S.T("act");
-      if (p.open === false) { S.set(sh, { y: -70 }); S.to(sh, { y: 0, duration: 0.2, ease: "power3.in" }, t); S.sfx("toggle", t + 0.2, 4); S.shake(t + 0.2, g); }
-      else { S.to(sh, { y: -70, rotation: 24, duration: 0.34, ease: "back.out(3)" }, t); S.sfx("toggle", t, 4); S.sfx("mallet", t + 0.15, 0); S.pulse(g, t + 0.1, 1.06, { q: 1 }); S.stars([[50, 120, 28, K.o], [370, 60, 22, K.y]], t + 0.2, { q: 1 }); }
+      if (p.open === false) { S.set(sh, { y: -70 }); S.to(sh, { y: 0, duration: 0.2, ease: "power3.in" }, t); S.sfx("latch", t + 0.2, 4); S.shake(t + 0.2, g); }
+      else { S.to(sh, { y: -70, rotation: 24, duration: 0.34, ease: "back.out(3)" }, t); S.sfx("latch", t, 4); S.sfx("mallet", t + 0.15, 0); S.pulse(g, t + 0.1, 1.06, { q: 1 }); S.stars([[50, 120, 28, K.o], [370, 60, 22, K.y]], t + 0.2, { q: 1 }); }
     } });
 
   def("door", { w: 440, h: 640, doc: "باب بيتفتح ووراه نور (فرصة، بداية جديدة، ادخل)", params: "", cues: { open: 0.5 },
@@ -260,6 +260,6 @@
       var leaf = S.org(S.part(d.r(58, 48, 324, 568, 6, K.o) + d.r(92, 86, 256, 220, 10, "none", { sw: 8 }) + d.r(92, 340, 256, 240, 10, "none", { sw: 8 }) + d.c(96, 330, 16, K.y, { sw: 7 })), 382, 330);
       S.rise(S.root, S.t0, { y: 300 });
       S.to(leaf, { scaleX: 0.16, duration: 0.45, ease: "power3.inOut" }, t); S.to(ry, { autoAlpha: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, t + 0.2);
-      S.sfx("swipe", t + 0.1, 3); S.sfx("shimmer", t + 0.3, 2);
+      S.sfx("door", t + 0.1, 3); S.sfx("shimmer", t + 0.3, 2);
     } });
 })(typeof window !== "undefined" ? window : globalThis);

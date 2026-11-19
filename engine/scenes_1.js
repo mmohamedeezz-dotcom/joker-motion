@@ -19,7 +19,7 @@
       var t = S.T("flip");
       S.to(a, { scaleY: 0, duration: 0.12, ease: "power2.in" }, t); S.to(b, { scaleY: 1, duration: 0.3, ease: "back.out(2.4)" }, t + 0.12);
       S.to(hot, { autoAlpha: 1, duration: 0.12 }, t + 0.12); S.to(g, { rotation: 3, duration: 0.3, ease: "back.out(3)" }, t + 0.12);
-      S.sfx("swipe", t + 0.07, 3); S.sfx("boop", t + 0.2, 0); S.stars([[360, 40, 26, K.y]], t + 0.25, { q: 1 });
+      S.sfx("paper", t + 0.07, 2); S.sfx("boop", t + 0.2, 0); S.stars([[360, 40, 26, K.y]], t + 0.25, { q: 1 });
     } });
 
   def("bars", { w: 440, h: 470, doc: "عمودين بيتقارنوا، والتاني بيعدّي الأول (المصاريف أعلى من الدخل، الطلب أعلى من العرض)", params: "labels:[أ,ب]", cues: { grow: 0.45, hit: 0.85 },
@@ -62,7 +62,7 @@
       S.txt(p.value || "50%", 50, 120, 420, 200, 200, K.l, { p: g }); S.txt(p.label || "خصم", 100, 300, 320, 100, 74, K.l, { p: g });
       var t = S.T("hit");
       S.set(g, { scale: 2.4, autoAlpha: 0, rotation: 40 });
-      S.to(g, { scale: 1, autoAlpha: 1, rotation: -10, duration: 0.24, ease: "power4.in" }, t); S.sfx("hit", t + 0.24, 0); S.sfx("sub", t + 0.24, 0); S.shake(t + 0.24);
+      S.to(g, { scale: 1, autoAlpha: 1, rotation: -10, duration: 0.24, ease: "power4.in" }, t); S.sfx("stamp", t + 0.24, 0); S.sfx("sub", t + 0.24, 0); S.shake(t + 0.24);
       S.to(g, { rotation: -4, scale: 1.05, duration: 0.9, ease: "sine.inOut", yoyo: true, repeat: 3 }, t + 0.4);
       S.stars([[40, 60, 30, K.y], [480, 470, 26, K.y]], t + 0.3, { q: 1 });
     } });
@@ -74,7 +74,7 @@
       for (var i = 0; i < n; i++) {
         var cx = 220 + (i % 2 ? 12 : -8), cy = 440 - i * 52;
         var c = S.part(d.p("M" + (cx - 130) + " " + cy + "v26a130 34 0 0 0 260 0v-26z", K.y) + d.l("M" + (cx - 70) + " " + (cy + 30) + "v22M" + cx + " " + (cy + 36) + "v22M" + (cx + 70) + " " + (cy + 30) + "v22", { sw: 6 }) + d.e(cx, cy, 130, 34, K.y) + d.e(cx, cy, 84, 18, K.w, { sw: 7 }));
-        S.drop(c, ts[i] - 0.3, { y: 600, rot0: i % 2 ? 10 : -10, s: "tap", g: i - 2 });
+        S.drop(c, ts[i] - 0.3, { y: 600, rot0: i % 2 ? 10 : -10, s: "coin", g: i - 2 });
       }
       if (p.label) { var l = S.label(p.label, 236, 20, 220, 92, K.n, K.c); S.pop(l, ts[n - 1] + 0.1, { rot0: 14, rot: 6, s: "mallet" }); }
       S.stars([[60, 150, 30, K.o], [400, 250, 22, K.y]], ts[n - 1] + 0.2, { q: 1 });
@@ -86,7 +86,7 @@
       S.part(d.r(40, 40, 500, 250, 28, K.w, { t: "rotate(-7 290 165)" }) + d.r(14, 76, 532, 262, 30, K.y) + d.r(40, 102, 480, 210, 16, "none", { sw: 6, da: "4 18" }) + d.c(280, 207, 70, K.w) + d.c(84, 146, 16, K.l, { s: 0 }) + d.c(476, 268, 16, K.l, { s: 0 }), { p: g });
       S.txt(p.value || "$", 210, 137, 140, 140, 96, K.l, { p: g });
       if (p.label) { var l = S.label(p.label, 330, 286, 220, 84, K.n, K.c, { p: g }); S.set(l, { rotation: -4 }); }
-      S.slide(g, S.t0, p.out ? 0 : 900, { s: "swipe" }); S.set(g, { rotation: -4 });
+      S.slide(g, S.t0, p.out ? 0 : 900, { s: "paper" }); S.set(g, { rotation: -4 });
       var t = S.T("go");
       if (p.out) { S.to(g, { x: -1100, y: -300, rotation: -38, duration: 0.5, ease: "power2.in" }, t); S.sfx("whoosh", t + 0.2, 2); }
       else { S.pulse(g, t, 1.1, { s: "mallet" }); S.sway(g, t + 0.3, 3); S.stars([[30, 40, 26, K.o]], t + 0.1, { q: 1 }); }
@@ -259,7 +259,7 @@
       var x = S.org(S.part(d.cross(670, 150, 74, K.o, K.w)), 670, 150), k = S.org(S.part(d.tick(230, 150, 74, K.y, K.l)), 230, 150);
       S.set(a, { rotation: 3 }); S.set(b, { rotation: -3 }); S.set([x, k], { scale: 0 });
       var ta = S.T("a"), tb = S.T("b");
-      S.slide(a, ta, 600); S.to(x, { scale: 1, duration: 0.3, ease: "back.out(3)" }, ta + 0.3); S.sfx("thud", ta + 0.3, -3);
+      S.slide(a, ta, 600); S.to(x, { scale: 1, duration: 0.3, ease: "back.out(3)" }, ta + 0.3); S.sfx("error", ta + 0.3, 0);
       S.slide(b, tb, -600); S.to(k, { scale: 1, duration: 0.3, ease: "back.out(3)" }, tb + 0.3); S.sfx("ding", tb + 0.3, 0);
       S.to([a, x], { autoAlpha: 0.5, duration: 0.3 }, tb + 0.1); S.to(b, { scale: 1.06, duration: 0.3, ease: "back.out(2)" }, tb + 0.35); S.stars([[40, 40, 30, K.y]], tb + 0.4, { q: 1 });
     } });

@@ -17,9 +17,9 @@
       if (p.label) S.txt(p.label, 164, 30, 272, 82, 58, K.y, { p: sign }); else S.part(d.star(210, 76, 26, K.y) + d.l("M260 62h140M260 92h96", { sw: 13, sc: K.c }), { p: sign });
       var pot = S.org(S.part(d.leaf(530, 474, 96, -112, K.n) + d.leaf(530, 474, 84, -52, K.n) + d.p("M506 540l-14-70h76l-14 70z", K.o)), 530, 540);
       S.set(body, { scaleY: 0 }); S.to(body, { scaleY: 1, duration: 0.4, ease: "back.out(1.5)" }, t); S.sfx("whoosh", t + 0.05, 0);
-      S.set(aw, { scaleY: 0, autoAlpha: 0 }); S.to(aw, { scaleY: 1, autoAlpha: 1, duration: 0.34, ease: "back.out(2.2)" }, t + 0.3); S.sfx("swipe", t + 0.34, 2);
+      S.set(aw, { scaleY: 0, autoAlpha: 0 }); S.to(aw, { scaleY: 1, autoAlpha: 1, duration: 0.34, ease: "back.out(2.2)" }, t + 0.3); S.sfx("cloth", t + 0.34, 2);
       S.pop(door, t + 0.5, { s: "tap" }); S.pop(win, t + 0.62, { s: "blip" }); S.pop(pot, t + 0.74, { q: 1 });
-      S.set(sign, { y: -200, rotation: -12, autoAlpha: 0 }); S.to(sign, { y: 0, rotation: 0, autoAlpha: 1, duration: 0.5, ease: "elastic.out(1,0.55)" }, to); S.sfx("thud", to + 0.1, 0);
+      S.set(sign, { y: -200, rotation: -12, autoAlpha: 0 }); S.to(sign, { y: 0, rotation: 0, autoAlpha: 1, duration: 0.5, ease: "elastic.out(1,0.55)" }, to); S.sfx("bell", to + 0.1, 0);
       S.stars([[70, 70, 30, K.y], [550, 110, 22, K.o]], to + 0.3, { q: 1 });
     } });
 
@@ -31,7 +31,7 @@
       S.floor(470, 20, 520, { p: g }); S.slide(g, S.t0, 800, { s: "whoosh", d: 0.4 });
       for (var i = 0; i < n; i++) {
         var x = 170 + i * 74, h = 120 + (i % 2) * 44, b = S.org(S.part(d.r(x, 196 - h, 92, h, 14, cols[i % 4]) + d.l("M" + (x + 20) + " " + (212 - h) + "h36", { sw: 8, sc: i % 4 === 2 ? K.c : K.l }), { p: items }), x + 46, 196);
-        S.drop(b, ts[i] - 0.3, { y: 600, rot0: i % 2 ? 20 : -20, rot: i % 2 ? 6 : -6, s: "tap", g: 3 });
+        S.drop(b, ts[i] - 0.3, { y: 600, rot0: i % 2 ? 20 : -20, rot: i % 2 ? 6 : -6, s: "plate", g: 1 });
         S.fromTo(g, { y: 0 }, { y: 10, duration: 0.07, yoyo: true, repeat: 1, immediateRender: false }, ts[i]);
       }
       S.stars([[470, 60, 28, K.y]], ts[n - 1] + 0.2, { q: 1 });
@@ -44,7 +44,7 @@
       S.floor(520, 20, 500); S.part(d.r(60, 270, 400, 250, 10, K.y) + d.r(396, 276, 58, 238, 0, "#000000", { s: 0, op: 0.12 }) + d.r(60, 270, 400, 250, 10, "none") + d.r(236, 270, 48, 250, 0, K.w) + d.r(160, 400, 200, 60, 12, K.w, { sw: 7 }) + d.l("M184 430h150", { sw: 8, sc: K.g }));
       var lidL = S.org(S.part(d.p("M40 230h230v44H40z", K.y)), 40, 274), lidR = S.org(S.part(d.p("M250 230h230v44H250z", K.y)), 480, 274);
       S.rise(S.root, S.t0, { y: 400 }); S.set(out, { y: 160, scale: 0.4, autoAlpha: 0 });
-      S.to(lidL, { rotation: -116, duration: 0.3, ease: "back.out(2)" }, t); S.to(lidR, { rotation: 116, duration: 0.3, ease: "back.out(2)" }, t); S.sfx("pop_big", t, 0);
+      S.to(lidL, { rotation: -116, duration: 0.3, ease: "back.out(2)" }, t); S.to(lidR, { rotation: 116, duration: 0.3, ease: "back.out(2)" }, t); S.sfx("box", t, 2);
       S.to(out, { y: -150, scale: 1, autoAlpha: 1, rotation: -6, duration: 0.45, ease: "back.out(2)" }, t + 0.12);
       S.sway(out, t + 0.7, 5, { rep: 3 }); S.stars([[70, 110, 30, K.y], [460, 60, 26, K.o], [470, 200, 20, K.n]], t + 0.3, {});
     } });
@@ -123,7 +123,7 @@
       S.part(d.r(60, 230, 340, 270, 12, K.o) + d.r(340, 236, 54, 258, 0, "#000000", { s: 0, op: 0.12 }) + d.r(60, 230, 340, 270, 12, "none") + d.r(200, 230, 60, 270, 0, K.y), { p: g });
       var lid = S.org(S.part(d.r(30, 150, 400, 90, 16, K.o) + d.r(196, 150, 68, 90, 0, K.y) + d.p("M230 150C180 60 100 70 110 120S190 150 230 150zM230 150C280 60 360 70 350 120S270 150 230 150z", K.y) + d.c(230, 146, 20, K.y), { p: g }), 230, 240);
       S.rise(g, S.t0, { y: 500 });
-      S.to(lid, { y: -80, rotation: -10, duration: 0.3, ease: "back.out(3)" }, t); S.sfx("pop_big", t, 0);
+      S.to(lid, { y: -80, rotation: -10, duration: 0.3, ease: "back.out(3)" }, t); S.sfx("box", t, 2); S.sfx("pop_big", t + 0.1, -2);
       for (var i = 0; i < 8; i++) { var c = S.box(215, 220, 30, 30, { bg: [K.y, K.n, K.w][i % 3], r: i % 3 ? "50%" : 6, bd: [6, K.l] }), a = (-70 + i * 20) * Math.PI / 180; S.set(c, { autoAlpha: 0 }); S.to(c, { autoAlpha: 1, x: Math.sin(a) * (180 + i * 14), y: -Math.cos(a) * 260, rotation: 200, duration: 0.5, ease: "power2.out" }, t + 0.05); S.to(c, { y: "+=160", autoAlpha: 0, duration: 0.5, ease: "power2.in" }, t + 0.55); }
       S.stars([[60, 80, 30, K.y], [410, 60, 24, K.y]], t + 0.1, {});
     } });
@@ -136,7 +136,7 @@
       S.part(d.p(gl, "none") + d.r(26, 14, 308, 44, 16, K.n) + d.r(26, 462, 308, 44, 16, K.n) + d.l("M92 130q4 40 40 70", { sw: 9, sc: K.g }), { p: g });
       S.pop(g, S.t0, { from: 0.4 });
       S.to(top, { scaleY: 0.2, duration: Math.max(0.5, S.T("flip") - S.t0 - 0.3), ease: "none" }, S.t0 + 0.3);
-      S.to(g, { rotation: 180, duration: 0.5, ease: "back.inOut(1.6)" }, S.T("flip")); S.sfx("swipe", S.T("flip") + 0.2, 3); S.sfx("thud", S.T("flip") + 0.5, -2);
+      S.to(g, { rotation: 180, duration: 0.5, ease: "back.inOut(1.6)" }, S.T("flip")); S.sfx("glass", S.T("flip") + 0.2, 3); S.sfx("thud", S.T("flip") + 0.5, -2);
     } });
 
   def("quote", { w: 860, h: 480, doc: "كارت اقتباس أو رأي عميل (شهادة، رأي، جملة مهمة)", params: "text, by", cues: { show: 0.2 },
