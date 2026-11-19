@@ -1,0 +1,139 @@
+{
+ "duration": 18.95,
+ "loudness": {
+  "lufs": -14.23,
+  "true_peak": -1.43
+ },
+ "effects": [
+  {
+   "t": 0,
+   "kind": "pop_big",
+   "sound": "earshot/pop in/pro_pop_in deep 02.opus"
+  },
+  {
+   "t": 0.32,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in airy 02.opus"
+  },
+  {
+   "t": 1.271,
+   "kind": "tick",
+   "sound": "kenney/interface/tick_002.ogg"
+  },
+  {
+   "t": 1.951,
+   "kind": "mallet",
+   "sound": "earshot/chime mallet/mallet celesta 02.opus"
+  },
+  {
+   "t": 2.65,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast crisp 02.opus"
+  },
+  {
+   "t": 2.98,
+   "kind": "thud",
+   "sound": "kenney/impact/impactPlank_medium_001.ogg"
+  },
+  {
+   "t": 3.13,
+   "kind": "mallet",
+   "sound": "earshot/chime mallet/mallet glock 01.opus"
+  },
+  {
+   "t": 4.781,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in double 01.opus"
+  },
+  {
+   "t": 5.081,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in double 02.opus"
+  },
+  {
+   "t": 5.45,
+   "kind": "mallet",
+   "sound": "earshot/chime mallet/mallet glock 02.opus"
+  },
+  {
+   "t": 6.54,
+   "kind": "pop_big",
+   "sound": "earshot/pop in/pro_pop_in knock 01.opus"
+  },
+  {
+   "t": 6.61,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big long 02.opus"
+  },
+  {
+   "t": 7.95,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big swell 01.opus"
+  },
+  {
+   "t": 7.98,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast sleeve 01.opus"
+  },
+  {
+   "t": 8.84,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in round 01.opus"
+  },
+  {
+   "t": 9.7,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in round 02.opus"
+  },
+  {
+   "t": 10.05,
+   "kind": "blip",
+   "sound": "earshot/pop ui/ui_pop blip 02.opus"
+  },
+  {
+   "t": 12.64,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big swell 02.opus"
+  },
+  {
+   "t": 12.72,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast sleeve 02.opus"
+  },
+  {
+   "t": 13.25,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in airy 01.opus"
+  },
+  {
+   "t": 13.666,
+   "kind": "mallet",
+   "sound": "earshot/chime mallet/mallet marimba 01.opus"
+  },
+  {
+   "t": 13.816,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in airy 02.opus"
+  },
+  {
+   "t": 14.88,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big tonal 01.opus"
+  },
+  {
+   "t": 15.03,
+   "kind": "hit",
+   "sound": "earshot/impact cut hit/cut_hit kick 02.opus"
+  },
+  {
+   "t": 15.11,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in double 01.opus"
+  },
+  {
+   "t": 16.16,
+   "kind": "mallet",
+   "sound": "earshot/chime mallet/mallet marimba 02.opus"
+  }
+ ]
+}
