@@ -3,6 +3,9 @@
     @font-face { font-family: "Display"; src: url("assets/fonts/display.ttf"); }
     @font-face { font-family: "Second"; src: url("assets/fonts/text.ttf"); font-weight: 100 900; }
     #jm { position: absolute; inset: 0; overflow: hidden; background: #EFEDE8; font-family: "Display", sans-serif; }
+    .jm-sh * { stroke: var(--k) !important; }
+    .jm-sh *:not([fill="none"]) { fill: var(--k) !important; }
+    .jm-sh [stroke="none"] { stroke: none !important; }
     #jm-stage { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: hidden; }
   </style>
   <div id="jm" data-composition-id="ad" data-width="1080" data-height="1920">

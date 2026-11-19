@@ -176,15 +176,17 @@
         else bx = { x: k === 0 ? 560 : 80, y: STAGE.y + (k === 0 ? 0 : 70), w: 440, h: STAGE.h - 70 };
         var s = Math.min(bx.w / def.w, bx.h / def.h, sp.max || def.max || 1.45) * (sp.scale || 1);
         var ox = bx.x + (bx.w - def.w * s) / 2 + (sp.dx || 0), oy = bx.y + (bx.h - def.h * s) / 2 + (sp.dy || 0);
-        var wrap = H.mk(layer, "div", "position:absolute;left:" + Math.round(ox) + "px;top:" + Math.round(oy) + "px;width:" + def.w + "px;height:" + def.h + "px;filter:drop-shadow(" + (12 / s).toFixed(1) + "px " + (14 / s).toFixed(1) + "px 0 " + ((b.world === "deep" || b.world === "night") ? "rgba(0,0,0,0.32)" : rgba(P.ink, 0.15)) + ")");
+        var wrap = H.mk(layer, "div", "position:absolute;left:" + Math.round(ox) + "px;top:" + Math.round(oy) + "px;width:" + def.w + "px;height:" + def.h + "px");;
         H.set(wrap, { scale: s, transformOrigin: "0% 0%" });
         var root = H.mk(wrap, "div", "position:absolute;left:0;top:0;width:" + def.w + "px;height:" + def.h + "px");
-        var S = sceneApi(b, sp, def, root, k);
+        var S = sceneApi(b, sp, def, root, k, s);
         try { def.build(S, sp); } catch (e) { if (G.console) G.console.error("scene " + sp.type + ": " + e.message); throw e; }
       });
     }
 
-    function sceneApi(b, sp, def, root, k) {
+    function sceneApi(b, sp, def, root, k, zoom) {
+      /* the hard shadow, drawn (not filtered): cheap on any machine, the same offset on screen at every scene size */
+      var SHX = (12 / zoom).toFixed(1), SHY = (14 / zoom).toFixed(1), SHC = (b.world === "deep" || b.world === "night") ? "rgba(0,0,0,0.32)" : rgba(P.ink, 0.15), SHO = (b.world === "deep" || b.world === "night") ? 0.32 : 0.15, SHK = (b.world === "deep" || b.world === "night") ? "#000000" : P.ink;
       var C0 = b.c, S = { c: b.c, P: P, t0: b.t0 + (k ? 0.12 : 0), t1: b.t1, tw: b.tw, w: def.w, h: def.h, root: root, p: sp, rgba: rgba };
       S.wt = function (i) { return ws(b.first + Math.max(0, Math.min(b.n - 1, i))); };
       S.wend = function (i) { return we(b.first + Math.max(0, Math.min(b.n - 1, i))); };
@@ -220,6 +222,7 @@
         if (o.r != null) st += "border-radius:" + (typeof o.r === "number" ? o.r + "px" : o.r) + ";";
         if (o.bd) st += "border:" + o.bd[0] + "px " + (o.bd[2] || "solid") + " " + o.bd[1] + ";";
         if (o.op != null) st += "opacity:" + o.op + ";";
+        if (o.bd && o.sh !== 0 && o.bg) st += "box-shadow:" + SHX + "px " + SHY + "px 0 " + SHC + ";";
         return H.mk(o.p || root, "div", st + (o.css || ""));
       };
       S.txt = function (text, x, y, w, h, size, color, o) {
@@ -281,9 +284,9 @@
       /* one moving piece of a drawing: its own layer the size of the scene box */
       S.part = function (inner, o) {
         o = o || {};
-        return H.mk(o.p || root, "div", "position:absolute;left:0;top:0;width:" + def.w + "px;height:" + def.h + "px", '<svg xmlns="http://www.w3.org/2000/svg" width="' + def.w + '" height="' + def.h + '" viewBox="0 0 ' + def.w + " " + def.h + '" style="overflow:visible">' + inner + "</svg>");
+        return H.mk(o.p || root, "div", "position:absolute;left:0;top:0;width:" + def.w + "px;height:" + def.h + "px", '<svg xmlns="http://www.w3.org/2000/svg" width="' + def.w + '" height="' + def.h + '" viewBox="0 0 ' + def.w + " " + def.h + '" style="overflow:visible">' + (o.sh === 0 ? "" : '<g class="jm-sh" transform="translate(' + SHX + " " + SHY + ')" opacity="' + SHO + '" style="--k:' + SHK + '">' + inner + "</g>") + inner + "</svg>");
       };
-      S.floor = function (y, x0, x1, o) { o = o || {}; var m = (x0 + x1) / 2; return S.part(S.d.l("M" + x0 + " " + y + "H" + x1) + S.d.l("M" + (x0 + 30) + " " + (y + 26) + "h60M" + (m - 10) + " " + (y + 26) + "h24M" + (x1 - 130) + " " + (y + 26) + "h90", { sw: 8, op: 0.4 }), o); };
+      S.floor = function (y, x0, x1, o) { o = o || {}; var m = (x0 + x1) / 2; return S.part(S.d.l("M" + x0 + " " + y + "H" + x1) + S.d.l("M" + (x0 + 30) + " " + (y + 26) + "h60M" + (m - 10) + " " + (y + 26) + "h24M" + (x1 - 130) + " " + (y + 26) + "h90", { sw: 8, op: 0.4 }), { p: o.p, sh: 0 }); };
       S.label = function (text, x, y, w, h, fill, color, o) {
         o = o || {};
         var e = S.box(x, y, w, h, { bg: fill, r: h / 2, bd: [8, K.l], p: o.p }); S.txt(text, 8, 0, w - 16, h - 16, o.size || Math.round(h * 0.5), color, { p: e, l: o.d ? 0 : 1 }); return e;
