@@ -12,10 +12,19 @@ const opt = (k) => { const i = args.indexOf("--" + k); return i < 0 ? null : (ar
 if (!specFile) { console.error("usage: node tools/make.mjs specs/<name>.json [--voice take.wav] [--out file.mp4] [--draft] [--no-render] [--snap t,t]"); process.exit(2); }
 const t0 = Date.now(), lap = (m) => console.log(("[" + ((Date.now() - t0) / 1000).toFixed(1) + "s] ").padEnd(10) + m);
 
-const spec = JSON.parse(fs.readFileSync(specFile, "utf8")), name = path.basename(specFile, ".json");
-const JM = engine(), parsed = JM.parse(spec);
-const unknown = [...new Set((spec.beats || []).flatMap((b) => (b.scenes || (b.scene ? [b.scene] : [])).map((s) => s.type)).filter((t) => !JM.scenes[t]))];
-if (unknown.length) { console.error("unknown scenes: " + unknown.join(", ")); process.exit(2); }
+// the agent's answer may arrive wrapped in a code fence or with a line of talk around it: keep the JSON object only
+const rawSpec = fs.readFileSync(specFile, "utf8"), j0 = rawSpec.indexOf("{"), j1 = rawSpec.lastIndexOf("}");
+const spec = JSON.parse(rawSpec.slice(j0, j1 + 1)), name = path.basename(specFile, ".json");
+const JM = engine();
+// a scene the library does not have becomes a drawing from the icon library, so one wrong name never stops a video
+const swapped = [];
+for (const b of spec.beats || []) {
+  if (b.scene && !b.scenes) { b.scenes = [b.scene]; delete b.scene; }
+  b.scenes = (b.scenes || []).filter((s) => s && typeof s === "object").slice(0, 2);
+  for (const s of b.scenes) if (!JM.scenes[s.type]) { swapped.push(s.type); s.icon = s.icon || String(s.type || "star").replace(/_/g, "-"); s.type = "icon"; }
+}
+if (swapped.length) console.log("unknown scenes drawn as icons: " + swapped.join(", "));
+const parsed = JM.parse(spec);
 if (!parsed.words.length) { console.error("the spec has no words"); process.exit(2); }
 
 const job = path.join(ROOT, "jobs", name);

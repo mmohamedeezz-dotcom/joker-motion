@@ -43,12 +43,14 @@ jobs:
           gh release view renders >/dev/null 2>&1 || gh release create renders --title "renders" --notes "Rendered videos" --latest=false
           gh release upload renders "out/$SAFE.mp4" --clobber
           echo "url=https://github.com/${{ github.repository }}/releases/download/renders/$SAFE.mp4" >> "$GITHUB_OUTPUT"
+          echo "asset=$(gh api "repos/${{ github.repository }}/releases/tags/renders" --jq ".assets[] | select(.name==\"$SAFE.mp4\") | .url")" >> "$GITHUB_OUTPUT"
       - name: callback
         if: ${{ always() && inputs.callback_url != '' }}
         env:
           CB: ${{ inputs.callback_url }}
           URL: ${{ steps.pub.outputs.url }}
+          ASSET: ${{ steps.pub.outputs.asset }}
           ST: ${{ job.status }}
           JOB_ID: ${{ inputs.job_id }}
         run: |
-          curl -sS -m 30 -X POST "$CB" -H "Content-Type: application/json" --data "$(jq -n --arg j "$JOB_ID" --arg s "$ST" --arg u "$URL" --arg r "${{ github.run_id }}" '{job_id:$j,status:$s,video_url:$u,run_id:$r}')" || true
+          curl -sS -m 30 -X POST "$CB" -H "Content-Type: application/json" --data "$(jq -n --arg j "$JOB_ID" --arg s "$ST" --arg u "$URL" --arg a "$ASSET" --arg r "${{ github.run_id }}" '{job_id:$j,status:$s,video_url:$u,asset_api_url:$a,run_id:$r}')" || true
