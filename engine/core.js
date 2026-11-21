@@ -446,7 +446,7 @@
     });
     built.forEach(function (b, k) {
       var t0 = Math.max(0, ws(b.first) - 0.06);
-      var t1 = k + 1 < built.length ? Math.max(t0 + 0.3, ws(built[k + 1].first) - 0.04) : END;
+      var t1 = k + 1 < built.length ? Math.max(t0 + 0.3, ws(built[k + 1].first) - 0.12) : END;   // the old group is gone before the next one shows: never two captions on top of each other
       H.tset(b.box, { visibility: "visible" }, t0);
       b.items.forEach(function (it) {
         var t = ws(it.i) - (it.i === b.first ? 0.05 : 0.14);
