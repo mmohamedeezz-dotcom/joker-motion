@@ -8,7 +8,7 @@ export function keyOf() {
   if (!k) throw new Error("NO_KEY");
   return k;
 }
-const norm = (s) => String(s).replace(/[ً-ْٰ]/g, "").replace(/[إأآا]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه").replace(/[^؀-ۿ0-9a-zA-Z\s]/g, " ").replace(/\s+/g, " ").trim();
+const norm = (s) => String(s).replace(/[\u064B-\u0652\u0670\u0640]/g, "").replace(/[إأآا]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه").replace(/[\u060C\u061B\u061F\u066B\u066C\u2026\u00AB\u00BB]/g, " ").replace(/[^\u0600-\u06FF0-9a-zA-Z\s]/g, " ").replace(/(\S)ء(?=\s|$)/g, "$1").replace(/\s+/g, " ").trim();
 export async function transcribe(file, models = (process.env.JM_ASR_MODEL || "gemini-3.5-transcribe,gemini-3.7-flash,gemini-3.6-flash,gemini-3.8-flash").split(",")) {
   const r = spawnSync("ffmpeg", ["-v", "error", "-i", file, "-ac", "1", "-ar", "16000", "-f", "wav", "-"], { maxBuffer: 1 << 28 });
   let res = null, last = "";
