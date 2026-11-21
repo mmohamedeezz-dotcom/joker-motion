@@ -1,0 +1,204 @@
+{
+ "duration": 26.4,
+ "loudness": {
+  "lufs": -14.3,
+  "true_peak": -1.64
+ },
+ "effects": [
+  {
+   "t": 0,
+   "kind": "pop_big",
+   "sound": "earshot/pop in/pro_pop_in deep 02.opus"
+  },
+  {
+   "t": 0.734,
+   "kind": "hit",
+   "sound": "earshot/impact cut hit/cut_hit kick 02.opus"
+  },
+  {
+   "t": 1.178,
+   "kind": "paper",
+   "sound": "kenney/casino/card-fan-2.ogg"
+  },
+  {
+   "t": 2.19,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big long 02.opus"
+  },
+  {
+   "t": 3.208,
+   "kind": "stamp",
+   "sound": "kenney/impact/impactPunch_heavy_001.ogg"
+  },
+  {
+   "t": 3.208,
+   "kind": "sub",
+   "sound": "earshot/sub drop/pro_sub_drop quick 02.opus"
+  },
+  {
+   "t": 4.69,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast crisp 02.opus"
+  },
+  {
+   "t": 5.13,
+   "kind": "tap",
+   "sound": "kenney/impact/impactWood_light_001.ogg"
+  },
+  {
+   "t": 5.285,
+   "kind": "tap",
+   "sound": "kenney/impact/impactWood_light_002.ogg"
+  },
+  {
+   "t": 5.904,
+   "kind": "tap",
+   "sound": "kenney/impact/impactWood_light_003.ogg"
+  },
+  {
+   "t": 6.044,
+   "kind": "thud",
+   "sound": "kenney/impact/impactPlank_medium_001.ogg"
+  },
+  {
+   "t": 6.475,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast sleeve 01.opus"
+  },
+  {
+   "t": 7.248,
+   "kind": "hit",
+   "sound": "earshot/impact cut hit/cut_hit punch 01.opus"
+  },
+  {
+   "t": 7.69,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big swell 01.opus"
+  },
+  {
+   "t": 7.75,
+   "kind": "paper",
+   "sound": "kenney/rpg/bookFlip1.ogg"
+  },
+  {
+   "t": 8.886,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in airy 02.opus"
+  },
+  {
+   "t": 9.35,
+   "kind": "mallet",
+   "sound": "earshot/chime mallet/mallet celesta 02.opus"
+  },
+  {
+   "t": 11.14,
+   "kind": "leather",
+   "sound": "kenney/rpg/beltHandle2.ogg"
+  },
+  {
+   "t": 11.608,
+   "kind": "card",
+   "sound": "kenney/casino/card-place-2.ogg"
+  },
+  {
+   "t": 11.807,
+   "kind": "card",
+   "sound": "kenney/casino/card-place-3.ogg"
+  },
+  {
+   "t": 12.006,
+   "kind": "card",
+   "sound": "kenney/casino/card-place-4.ogg"
+  },
+  {
+   "t": 13.351,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast sleeve 02.opus"
+  },
+  {
+   "t": 13.551,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in double 01.opus"
+  },
+  {
+   "t": 14.12,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big swell 02.opus"
+  },
+  {
+   "t": 14.25,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast tight 01.opus"
+  },
+  {
+   "t": 15.567,
+   "kind": "thud",
+   "sound": "kenney/impact/impactPlank_medium_002.ogg"
+  },
+  {
+   "t": 16.236,
+   "kind": "paper",
+   "sound": "kenney/rpg/bookFlip2.ogg"
+  },
+  {
+   "t": 16.471,
+   "kind": "mallet",
+   "sound": "earshot/chime mallet/mallet glock 01.opus"
+  },
+  {
+   "t": 17.01,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast tight 02.opus"
+  },
+  {
+   "t": 17.37,
+   "kind": "thud",
+   "sound": "kenney/impact/impactPlank_medium_003.ogg"
+  },
+  {
+   "t": 18.578,
+   "kind": "card",
+   "sound": "kenney/casino/card-shove-1.ogg"
+  },
+  {
+   "t": 18.698,
+   "kind": "sting",
+   "sound": "earshot/chime logo sting/logo_sting soft_bloom 02.opus"
+  },
+  {
+   "t": 18.971,
+   "kind": "latch",
+   "sound": "kenney/rpg/metalLatch.ogg"
+  },
+  {
+   "t": 19.121,
+   "kind": "sting",
+   "sound": "earshot/chime logo sting/logo_sting spark 01.opus"
+  },
+  {
+   "t": 20.11,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big tonal 01.opus"
+  },
+  {
+   "t": 20.89,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_1822 02.opus"
+  },
+  {
+   "t": 23.393,
+   "kind": "swipe",
+   "sound": "earshot/whoosh swipe/swipe cloth 02.opus"
+  },
+  {
+   "t": 24.013,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_1930 01.opus"
+  },
+  {
+   "t": 24.213,
+   "kind": "sting",
+   "sound": "earshot/chime logo sting/logo_sting spark 02.opus"
+  }
+ ]
+}
