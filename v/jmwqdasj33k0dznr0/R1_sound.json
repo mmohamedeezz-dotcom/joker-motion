@@ -1,0 +1,239 @@
+{
+ "duration": 24.83,
+ "loudness": {
+  "lufs": -14.3,
+  "true_peak": -1.23
+ },
+ "effects": [
+  {
+   "t": 0,
+   "kind": "pop_big",
+   "sound": "earshot/pop in/pro_pop_in deep 02.opus"
+  },
+  {
+   "t": 0.03,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_1822 02.opus"
+  },
+  {
+   "t": 0.63,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_1930 01.opus"
+  },
+  {
+   "t": 0.685,
+   "kind": "pop_big",
+   "sound": "earshot/pop in/pro_pop_in knock 01.opus"
+  },
+  {
+   "t": 1.229,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_1930 02.opus"
+  },
+  {
+   "t": 1.399,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in airy 02.opus"
+  },
+  {
+   "t": 2.72,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast crisp 02.opus"
+  },
+  {
+   "t": 2.8,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in double 01.opus"
+  },
+  {
+   "t": 3.335,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in double 02.opus"
+  },
+  {
+   "t": 3.63,
+   "kind": "tick",
+   "sound": "kenney/interface/tick_002.ogg"
+  },
+  {
+   "t": 4.225,
+   "kind": "tick",
+   "sound": "kenney/interface/tick_004.ogg"
+  },
+  {
+   "t": 4.77,
+   "kind": "tick",
+   "sound": "kenney/ui/click1.ogg"
+  },
+  {
+   "t": 5.415,
+   "kind": "tick",
+   "sound": "kenney/ui/click2.ogg"
+  },
+  {
+   "t": 6.28,
+   "kind": "box",
+   "sound": "kenney/casino/cards-pack-open-2.ogg"
+  },
+  {
+   "t": 6.35,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big long 02.opus"
+  },
+  {
+   "t": 6.43,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast sleeve 01.opus"
+  },
+  {
+   "t": 7.881,
+   "kind": "blip",
+   "sound": "earshot/pop ui/ui_pop blip 02.opus"
+  },
+  {
+   "t": 8.073,
+   "kind": "blip",
+   "sound": "earshot/pop ui/ui_pop boop 01.opus"
+  },
+  {
+   "t": 9.19,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast sleeve 02.opus"
+  },
+  {
+   "t": 9.35,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast tight 01.opus"
+  },
+  {
+   "t": 9.56,
+   "kind": "cloth",
+   "sound": "kenney/rpg/cloth2.ogg"
+  },
+  {
+   "t": 10.006,
+   "kind": "plate",
+   "sound": "kenney/foley/platesHit10.ogg"
+  },
+  {
+   "t": 10.843,
+   "kind": "bell",
+   "sound": "kenney/impact/impactBell_heavy_001.ogg"
+  },
+  {
+   "t": 11.191,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big swell 01.opus"
+  },
+  {
+   "t": 11.341,
+   "kind": "hit",
+   "sound": "earshot/impact cut hit/cut_hit kick 02.opus"
+  },
+  {
+   "t": 12.376,
+   "kind": "mallet",
+   "sound": "earshot/chime mallet/mallet celesta 02.opus"
+  },
+  {
+   "t": 12.632,
+   "kind": "thud",
+   "sound": "kenney/impact/impactPlank_medium_001.ogg"
+  },
+  {
+   "t": 13.24,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in round 01.opus"
+  },
+  {
+   "t": 13.28,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast tight 02.opus"
+  },
+  {
+   "t": 14.197,
+   "kind": "paper",
+   "sound": "kenney/casino/card-fan-2.ogg"
+  },
+  {
+   "t": 14.499,
+   "kind": "thud",
+   "sound": "kenney/impact/impactPlank_medium_002.ogg"
+  },
+  {
+   "t": 14.86,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big swell 02.opus"
+  },
+  {
+   "t": 15.14,
+   "kind": "paper",
+   "sound": "kenney/rpg/bookFlip1.ogg"
+  },
+  {
+   "t": 15.35,
+   "kind": "toggle",
+   "sound": "kenney/interface/switch_002.ogg"
+  },
+  {
+   "t": 15.843,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in round 02.opus"
+  },
+  {
+   "t": 16.657,
+   "kind": "toggle",
+   "sound": "kenney/interface/switch_003.ogg"
+  },
+  {
+   "t": 16.727,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big tonal 01.opus"
+  },
+  {
+   "t": 16.777,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_2045 01.opus"
+  },
+  {
+   "t": 17.65,
+   "kind": "card",
+   "sound": "kenney/casino/card-place-2.ogg"
+  },
+  {
+   "t": 17.997,
+   "kind": "card",
+   "sound": "kenney/casino/card-place-3.ogg"
+  },
+  {
+   "t": 18.343,
+   "kind": "card",
+   "sound": "kenney/casino/card-place-4.ogg"
+  },
+  {
+   "t": 19.5,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in airy 01.opus"
+  },
+  {
+   "t": 19.54,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast whip 01.opus"
+  },
+  {
+   "t": 20.61,
+   "kind": "swish",
+   "sound": "earshot/whoosh swish/swish bright 02.opus"
+  },
+  {
+   "t": 21.36,
+   "kind": "pop_big",
+   "sound": "earshot/pop in/pro_pop_in knock 02.opus"
+  },
+  {
+   "t": 21.61,
+   "kind": "swipe",
+   "sound": "earshot/whoosh swipe/swipe cloth 02.opus"
+  }
+ ]
+}
