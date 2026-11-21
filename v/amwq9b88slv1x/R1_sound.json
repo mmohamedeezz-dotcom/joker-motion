@@ -1,0 +1,94 @@
+{
+ "duration": 10.69,
+ "loudness": {
+  "lufs": -14.03,
+  "true_peak": -1.21
+ },
+ "effects": [
+  {
+   "t": 0,
+   "kind": "pop_big",
+   "sound": "earshot/pop in/pro_pop_in deep 02.opus"
+  },
+  {
+   "t": 0,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast crisp 02.opus"
+  },
+  {
+   "t": 0.75,
+   "kind": "bell",
+   "sound": "kenney/impact/impactBell_heavy_001.ogg"
+  },
+  {
+   "t": 0.866,
+   "kind": "mallet",
+   "sound": "earshot/chime mallet/mallet celesta 02.opus"
+  },
+  {
+   "t": 1.199,
+   "kind": "error",
+   "sound": "kenney/interface/error_002.ogg"
+  },
+  {
+   "t": 1.844,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_1822 02.opus"
+  },
+  {
+   "t": 2.64,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast sleeve 01.opus"
+  },
+  {
+   "t": 2.68,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big long 02.opus"
+  },
+  {
+   "t": 3.789,
+   "kind": "blip",
+   "sound": "earshot/pop ui/ui_pop blip 02.opus"
+  },
+  {
+   "t": 3.909,
+   "kind": "blip",
+   "sound": "earshot/pop ui/ui_pop boop 01.opus"
+  },
+  {
+   "t": 4.97,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in airy 02.opus"
+  },
+  {
+   "t": 5.04,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big swell 01.opus"
+  },
+  {
+   "t": 5.937,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in double 01.opus"
+  },
+  {
+   "t": 6.416,
+   "kind": "mallet",
+   "sound": "earshot/chime mallet/mallet glock 01.opus"
+  },
+  {
+   "t": 6.93,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big swell 02.opus"
+  },
+  {
+   "t": 7.36,
+   "kind": "pop_big",
+   "sound": "earshot/pop in/pro_pop_in knock 01.opus"
+  },
+  {
+   "t": 7.791,
+   "kind": "pop_big",
+   "sound": "earshot/pop in/pro_pop_in knock 02.opus"
+  }
+ ]
+}
