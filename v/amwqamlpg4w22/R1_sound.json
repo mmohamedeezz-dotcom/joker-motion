@@ -1,0 +1,209 @@
+{
+ "duration": 28.37,
+ "loudness": {
+  "lufs": -14.37,
+  "true_peak": -1.63
+ },
+ "effects": [
+  {
+   "t": 0,
+   "kind": "pop_big",
+   "sound": "earshot/pop in/pro_pop_in deep 02.opus"
+  },
+  {
+   "t": 0,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast crisp 02.opus"
+  },
+  {
+   "t": 0.58,
+   "kind": "thud",
+   "sound": "kenney/impact/impactPlank_medium_001.ogg"
+  },
+  {
+   "t": 0.857,
+   "kind": "box",
+   "sound": "kenney/casino/cards-pack-open-2.ogg"
+  },
+  {
+   "t": 1.357,
+   "kind": "mallet",
+   "sound": "earshot/chime mallet/mallet celesta 02.opus"
+  },
+  {
+   "t": 2.29,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast sleeve 01.opus"
+  },
+  {
+   "t": 2.37,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in airy 02.opus"
+  },
+  {
+   "t": 5.305,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big long 02.opus"
+  },
+  {
+   "t": 5.315,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_1822 02.opus"
+  },
+  {
+   "t": 5.702,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_1930 01.opus"
+  },
+  {
+   "t": 6.089,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_1930 02.opus"
+  },
+  {
+   "t": 6.259,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in double 01.opus"
+  },
+  {
+   "t": 7.27,
+   "kind": "plate",
+   "sound": "kenney/foley/platesHit10.ogg"
+  },
+  {
+   "t": 7.886,
+   "kind": "plate",
+   "sound": "kenney/foley/platesHit2.ogg"
+  },
+  {
+   "t": 8.502,
+   "kind": "plate",
+   "sound": "kenney/foley/platesHit3.ogg"
+  },
+  {
+   "t": 9.77,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big swell 01.opus"
+  },
+  {
+   "t": 9.92,
+   "kind": "stamp",
+   "sound": "kenney/impact/impactPunch_heavy_001.ogg"
+  },
+  {
+   "t": 9.92,
+   "kind": "sub",
+   "sound": "earshot/sub drop/pro_sub_drop quick 02.opus"
+  },
+  {
+   "t": 10.863,
+   "kind": "shimmer",
+   "sound": "earshot/chime shimmer sparkle/pro_shimmer m1 02.opus"
+  },
+  {
+   "t": 12.081,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast sleeve 02.opus"
+  },
+  {
+   "t": 12.431,
+   "kind": "thud",
+   "sound": "kenney/impact/impactPlank_medium_002.ogg"
+  },
+  {
+   "t": 13.06,
+   "kind": "box",
+   "sound": "kenney/casino/cards-pack-take-out-1.ogg"
+  },
+  {
+   "t": 13.16,
+   "kind": "pop_big",
+   "sound": "earshot/pop in/pro_pop_in knock 01.opus"
+  },
+  {
+   "t": 14.893,
+   "kind": "paper",
+   "sound": "kenney/casino/card-fan-2.ogg"
+  },
+  {
+   "t": 16.06,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast tight 01.opus"
+  },
+  {
+   "t": 16.16,
+   "kind": "thud",
+   "sound": "kenney/impact/impactPlank_medium_003.ogg"
+  },
+  {
+   "t": 16.23,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big swell 02.opus"
+  },
+  {
+   "t": 17.991,
+   "kind": "blip",
+   "sound": "earshot/pop ui/ui_pop blip 02.opus"
+  },
+  {
+   "t": 18.111,
+   "kind": "blip",
+   "sound": "earshot/pop ui/ui_pop boop 01.opus"
+  },
+  {
+   "t": 19.17,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast tight 02.opus"
+  },
+  {
+   "t": 19.21,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big tonal 01.opus"
+  },
+  {
+   "t": 20.157,
+   "kind": "mallet",
+   "sound": "earshot/chime mallet/mallet glock 01.opus"
+  },
+  {
+   "t": 20.307,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in double 02.opus"
+  },
+  {
+   "t": 21.81,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big tonal 02.opus"
+  },
+  {
+   "t": 22.44,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_2045 01.opus"
+  },
+  {
+   "t": 23.707,
+   "kind": "swipe",
+   "sound": "earshot/whoosh swipe/swipe cloth 02.opus"
+  },
+  {
+   "t": 24.428,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_2045 02.opus"
+  },
+  {
+   "t": 25.695,
+   "kind": "swipe",
+   "sound": "earshot/whoosh swipe/swipe flick 01.opus"
+  },
+  {
+   "t": 26.315,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_2167 01.opus"
+  },
+  {
+   "t": 26.515,
+   "kind": "sting",
+   "sound": "earshot/chime logo sting/logo_sting soft_bloom 02.opus"
+  }
+ ]
+}
