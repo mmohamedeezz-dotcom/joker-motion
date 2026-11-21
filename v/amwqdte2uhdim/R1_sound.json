@@ -1,0 +1,184 @@
+{
+ "duration": 29.07,
+ "loudness": {
+  "lufs": -14.19,
+  "true_peak": -1.48
+ },
+ "effects": [
+  {
+   "t": 0,
+   "kind": "pop_big",
+   "sound": "earshot/pop in/pro_pop_in deep 02.opus"
+  },
+  {
+   "t": 0.1,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast crisp 02.opus"
+  },
+  {
+   "t": 0.12,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in airy 02.opus"
+  },
+  {
+   "t": 2.927,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in double 01.opus"
+  },
+  {
+   "t": 3.3,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast sleeve 01.opus"
+  },
+  {
+   "t": 3.33,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in double 02.opus"
+  },
+  {
+   "t": 4.646,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_1822 02.opus"
+  },
+  {
+   "t": 5.961,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in round 01.opus"
+  },
+  {
+   "t": 6.48,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast sleeve 02.opus"
+  },
+  {
+   "t": 6.52,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big long 02.opus"
+  },
+  {
+   "t": 7.79,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_1930 01.opus"
+  },
+  {
+   "t": 8.243,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_1930 02.opus"
+  },
+  {
+   "t": 8.695,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_2045 01.opus"
+  },
+  {
+   "t": 8.865,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in round 02.opus"
+  },
+  {
+   "t": 9.91,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in airy 01.opus"
+  },
+  {
+   "t": 9.98,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big swell 01.opus"
+  },
+  {
+   "t": 11.497,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in airy 02.opus"
+  },
+  {
+   "t": 13.084,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in double 01.opus"
+  },
+  {
+   "t": 13.76,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast tight 01.opus"
+  },
+  {
+   "t": 14.13,
+   "kind": "cloth",
+   "sound": "kenney/rpg/cloth2.ogg"
+  },
+  {
+   "t": 14.29,
+   "kind": "tap",
+   "sound": "kenney/impact/impactWood_light_001.ogg"
+  },
+  {
+   "t": 15.214,
+   "kind": "bell",
+   "sound": "kenney/impact/impactBell_heavy_001.ogg"
+  },
+  {
+   "t": 16.255,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast tight 02.opus"
+  },
+  {
+   "t": 16.605,
+   "kind": "thud",
+   "sound": "kenney/impact/impactPlank_medium_001.ogg"
+  },
+  {
+   "t": 17.33,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big swell 02.opus"
+  },
+  {
+   "t": 17.33,
+   "kind": "paper",
+   "sound": "kenney/casino/card-fan-2.ogg"
+  },
+  {
+   "t": 20.078,
+   "kind": "paper",
+   "sound": "kenney/rpg/bookFlip1.ogg"
+  },
+  {
+   "t": 21.09,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast whip 01.opus"
+  },
+  {
+   "t": 21.13,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big tonal 01.opus"
+  },
+  {
+   "t": 22.314,
+   "kind": "blip",
+   "sound": "earshot/pop ui/ui_pop blip 02.opus"
+  },
+  {
+   "t": 23.318,
+   "kind": "blip",
+   "sound": "earshot/pop ui/ui_pop boop 01.opus"
+  },
+  {
+   "t": 24.79,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in double 02.opus"
+  },
+  {
+   "t": 24.93,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big tonal 02.opus"
+  },
+  {
+   "t": 26.176,
+   "kind": "pop_big",
+   "sound": "earshot/pop in/pro_pop_in knock 01.opus"
+  },
+  {
+   "t": 27.17,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big windy 01.opus"
+  }
+ ]
+}
