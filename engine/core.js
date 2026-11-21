@@ -272,14 +272,6 @@
           (o.wrap ? "white-space:normal;line-height:1.22;" : "white-space:nowrap;");
         return H.mk(o.p || root, "div", st + (o.css || ""), null, { dir: "rtl" }, String(text));
       };
-      /* the client's real logo file (spec.logo): shown as it is, never redrawn or recoloured */
-      S.logoUrl = spec.logo ? String(spec.logo) : "";
-      S.logo = function (x, y, w, h, o) {
-        o = o || {};
-        var g = H.mk(o.p || root, "div", css(x, y, w, h) + "display:flex;align-items:center;justify-content:center;");
-        H.mk(g, "img", "max-width:100%;max-height:100%;object-fit:contain;display:block", null, { src: S.logoUrl, alt: "" });
-        return g;
-      };
       S.svg = function (x, y, w, h, inner, o) {
         o = o || {};
         return H.mk(o.p || root, "div", css(x, y, w, h) + (o.css || ""), '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 ' + (o.vw || w) + " " + (o.vh || h) + '" style="overflow:visible">' + inner + "</svg>");
@@ -466,6 +458,21 @@
       if (!b.last) { H.to(b.box, { opacity: 0, y: -34, duration: 0.07, ease: "power2.in" }, t1 - 0.07); H.tset(b.box, { visibility: "hidden" }, t1); }
     });
     addSfx("pop_big", 0, 1);
+
+    /* ----- end card: the client's real logo, as it is, on a calm ground that suits it (light by default, ink when the
+       logo is made for dark grounds). It sits in the tail after the last word, so it never fights a scene's colours ----- */
+    if (spec.logo) {
+      var tE = we(N - 1) + 0.3, dk = spec.logo_bg === "dark", ground = dk ? P.ink : P.paper;
+      var card = H.mk(null, "div", "position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:50;visibility:hidden;background:" + ground);
+      var lgw = H.mk(card, "div", "position:absolute;left:190px;top:700px;width:700px;height:420px;display:flex;align-items:center;justify-content:center");
+      H.mk(lgw, "img", "width:100%;height:100%;object-fit:contain;display:block", null, { src: String(spec.logo), alt: "" });
+      H.set(card, { clipPath: "circle(0% at 50% 50%)" });
+      H.tset(card, { visibility: "visible" }, tE);
+      H.to(card, { clipPath: "circle(120% at 50% 50%)", duration: 0.5, ease: "power3.inOut" }, tE);
+      H.set(lgw, { autoAlpha: 0, scale: 0.86 });
+      H.to(lgw, { autoAlpha: 1, scale: 1, duration: 0.5, ease: "back.out(1.6)" }, tE + 0.25);
+      addSfx("wipe", tE + 0.1, 0);
+    }
 
     /* ----- progress line ----- */
     var c0 = beats[0].c;
