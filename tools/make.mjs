@@ -37,6 +37,15 @@ fs.cpSync(path.join(ROOT, "template"), job, { recursive: true });
 fs.cpSync(path.join(ROOT, "engine"), path.join(job, "engine"), { recursive: true });
 fs.mkdirSync(path.join(job, "assets/fonts"), { recursive: true });
 for (const f of ["display.ttf", "text.ttf"]) fs.copyFileSync(path.join(ROOT, "fonts", f), path.join(job, "assets/fonts", f));
+// the client's logo: downloaded into the job so the render never depends on the network; if it fails the brand name is drawn instead
+if (spec.logo && /^https?:\/\//i.test(String(spec.logo))) {
+  try {
+    const r = await fetch(String(spec.logo)); if (!r.ok) throw new Error("HTTP " + r.status);
+    const ext = ((/\.(png|jpe?g|webp|svg)(?:[?#]|$)/i.exec(String(spec.logo)) || [])[1] || "png").toLowerCase();
+    fs.writeFileSync(path.join(job, "assets", "logo." + ext), Buffer.from(await r.arrayBuffer()));
+    spec.logo = "assets/logo." + ext; lap("logo: " + spec.logo);
+  } catch (e) { console.log("logo download failed (" + e.message + "), drawing the brand name"); delete spec.logo; }
+} else if (spec.logo) delete spec.logo;
 
 // 1 · the voice
 //   --voice <file>: a ready recording · ElevenLabs when its key is set (exact word times) · else Gemini TTS

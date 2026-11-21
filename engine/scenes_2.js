@@ -56,7 +56,9 @@
 
   def("signature", { plain: true, w: 920, h: 260, doc: "اسم البراند كبير وتحته خط (توقيع، خاتمة)", params: "name", cues: { show: 0.5 },
     build: function (S, p) {
-      var K = S.K, C = S.c, n = S.txt(p.name || "", 0, 0, 920, 190, 150, C.ink), u = S.box(250, 196, 420, 26, { bg: C.hi, r: 13, bd: [7, K.l] }), t = S.T("show");
+      var K = S.K, C = S.c, t = S.T("show");
+      if (S.logoUrl) { var lg = S.logo(110, 0, 700, 250); S.fade(lg, t, { y: 40 }); S.sfx("sting", t + 0.05, 0); S.stars([[110, 30, 30, C.hi], [810, 200, 24, C.hi]], t + 0.4, { q: 1 }); return; }
+      var n = S.txt(p.name || "", 0, 0, 920, 190, 150, C.ink), u = S.box(250, 196, 420, 26, { bg: C.hi, r: 13, bd: [7, K.l] });
       S.fade(n, t, { y: 40 }); S.sfx("sting", t + 0.05, 0); S.grow(u, t + 0.3, "x", "100% 50%", { d: 0.5 }); S.stars([[150, 40, 30, C.hi], [790, 150, 24, C.hi]], t + 0.4, { q: 1 });
     } });
 
@@ -83,7 +85,8 @@
         S.to(k, { scale: 1, duration: 0.3, ease: "back.out(3)" }, tk); S.sfx("ding", tk, i); chips.push(g);
       });
       var tl = ts[n - 1] + 0.8;
-      if (p.name) { var s = S.txt(p.name, 0, n * gap + 10, 900, 170, 120, C.ink), u = S.box(240, n * gap + 176, 420, 24, { bg: C.hi, r: 12, bd: [7, K.l] }); S.fade(s, tl, { y: 40 }); S.sfx("sting", tl, 1); S.grow(u, tl + 0.3, "x", "100% 50%", { d: 0.5 }); }
+      if (S.logoUrl) { var lg = S.logo(150, n * gap + 20, 600, 170); S.fade(lg, tl, { y: 40 }); S.sfx("sting", tl, 1); }
+      else if (p.name) { var s = S.txt(p.name, 0, n * gap + 10, 900, 170, 120, C.ink), u = S.box(240, n * gap + 176, 420, 24, { bg: C.hi, r: 12, bd: [7, K.l] }); S.fade(s, tl, { y: 40 }); S.sfx("sting", tl, 1); S.grow(u, tl + 0.3, "x", "100% 50%", { d: 0.5 }); }
       S.to(chips, { y: -10, duration: 0.9, ease: "sine.inOut", yoyo: true, repeat: 1, stagger: 0.2 }, tl + 0.2);
       function P(S2) { return S2.P.deep; }
     } });

@@ -272,6 +272,14 @@
           (o.wrap ? "white-space:normal;line-height:1.22;" : "white-space:nowrap;");
         return H.mk(o.p || root, "div", st + (o.css || ""), null, { dir: "rtl" }, String(text));
       };
+      /* the client's real logo file (spec.logo): shown as it is, never redrawn or recoloured */
+      S.logoUrl = spec.logo ? String(spec.logo) : "";
+      S.logo = function (x, y, w, h, o) {
+        o = o || {};
+        var g = H.mk(o.p || root, "div", css(x, y, w, h) + "display:flex;align-items:center;justify-content:center;");
+        H.mk(g, "img", "max-width:100%;max-height:100%;object-fit:contain;display:block", null, { src: S.logoUrl, alt: "" });
+        return g;
+      };
       S.svg = function (x, y, w, h, inner, o) {
         o = o || {};
         return H.mk(o.p || root, "div", css(x, y, w, h) + (o.css || ""), '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 ' + (o.vw || w) + " " + (o.vh || h) + '" style="overflow:visible">' + inner + "</svg>");
