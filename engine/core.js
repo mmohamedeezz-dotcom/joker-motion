@@ -20,6 +20,12 @@
     var words = [], beats = [];
     (spec.beats || []).forEach(function (b, bi) {
       var toks = String(b.text || "").replace(/([|\/\[\]{}])/g, " $1 ").split(/\s+/).filter(Boolean);
+      /* a one-letter prefix written apart («فـ يمسك», «و / كمان») belongs to the next word: never show it alone */
+      for (var q = 0; q < toks.length - 1; q++) {
+        if (!/^[فوبلك]ـ?$/.test(toks[q])) continue;
+        var nq = q + 1; while (nq < toks.length && /^[|\/\[\]{}]$/.test(toks[nq])) nq++;
+        if (nq < toks.length && /^\*?[\u0621-\u064A]/.test(toks[nq])) { var pre = toks[q].replace("ـ", ""); toks[nq] = toks[nq].charAt(0) === "*" ? "*" + pre + toks[nq].slice(1) : pre + toks[nq]; toks.splice(q, 1); q--; }
+      }
       var groups = [], g = null, line = null, pill = false, ghost = false, first = words.length;
       function newGroup() { g = { lines: [], first: words.length, n: 0, ghost: 0 }; groups.push(g); line = null; }
       function newLine() { line = { items: [], pill: pill }; g.lines.push(line); }
@@ -50,6 +56,7 @@
     var beats = spec.beats || [];
     return beats.map(function (b, i) {
       var plain = String(b.text || "").replace(/[|\/\[\]{}*]/g, " ").replace(/\s+([،.؟!:])/g, "$1").replace(/\s+/g, " ").trim();
+      plain = plain.replace(/(^|\s)([فوبلك])ـ?\s+(?=[\u0621-\u064A])/g, "$1$2");
       var n = plain.split(" ").length, say = String(b.say || "").replace(/\s+/g, " ").trim();
       var s = say && say.split(" ").length === n ? say : plain;          // the vowelled line is used only if it has the same words
       if (!/[.؟!،…:]$/.test(s)) s += i === beats.length - 1 ? "." : "،";
@@ -418,9 +425,12 @@
         var c = b.c, base = b.spec.size || (bi === 0 && gi === 0 ? 150 : 132);
         var box = H.mk(caps, "div", "position:absolute;left:0;top:262px;width:1080px;display:flex;flex-direction:column;align-items:center;visibility:hidden");
         var items = [];
-        g.lines.forEach(function (ln) {
-          var txt = ln.items.map(function (x) { return x.text; }).join(" ");
-          var size = fitSize(txt, base, ln.pill ? 880 : 960, "d") - (ln.pill ? 0 : 0);
+        /* the caption lives between top:262 and the scene stage (y 790): measure every line first and shrink the whole
+           group together when it would run into the drawings, so text never sits on text or on a scene */
+        var CAP_H = 506, fits = g.lines.map(function (ln) { return fitSize(ln.items.map(function (x) { return x.text; }).join(" "), base, ln.pill ? 880 : 960, "d"); });
+        var capH = fits.reduce(function (s, z, li) { return s + z * 1.32 + (g.lines[li].pill ? 16 : 0); }, 0), capK = capH > CAP_H ? CAP_H / capH : 1;
+        g.lines.forEach(function (ln, li) {
+          var size = Math.floor(fits[li] * capK);
           var row = H.mk(box, "div", "display:flex;justify-content:center;align-items:center;gap:0 30px", null, { dir: "rtl" }), host = row, bg = null;
           if (ln.pill) {
             host = H.mk(row, "div", "position:relative;display:flex;gap:0 30px;padding:0 38px;margin:8px 0", null, { dir: "rtl" });
