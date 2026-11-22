@@ -1,0 +1,204 @@
+{
+ "duration": 24.5,
+ "loudness": {
+  "lufs": -14.26,
+  "true_peak": -1.05
+ },
+ "effects": [
+  {
+   "t": 0,
+   "kind": "pop_big",
+   "sound": "earshot/pop in/pro_pop_in deep 02.opus"
+  },
+  {
+   "t": 0,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in airy 02.opus"
+  },
+  {
+   "t": 0.22,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast crisp 02.opus"
+  },
+  {
+   "t": 0.848,
+   "kind": "blip",
+   "sound": "earshot/pop ui/ui_pop blip 02.opus"
+  },
+  {
+   "t": 1.03,
+   "kind": "tick",
+   "sound": "kenney/interface/tick_002.ogg"
+  },
+  {
+   "t": 1.863,
+   "kind": "tick",
+   "sound": "kenney/interface/tick_004.ogg"
+  },
+  {
+   "t": 2.55,
+   "kind": "box",
+   "sound": "kenney/casino/cards-pack-open-2.ogg"
+  },
+  {
+   "t": 2.62,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big long 02.opus"
+  },
+  {
+   "t": 3.568,
+   "kind": "toggle",
+   "sound": "kenney/interface/switch_002.ogg"
+  },
+  {
+   "t": 3.648,
+   "kind": "shimmer",
+   "sound": "earshot/chime shimmer sparkle/pro_shimmer m1 02.opus"
+  },
+  {
+   "t": 4.99,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast sleeve 01.opus"
+  },
+  {
+   "t": 5.22,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast sleeve 02.opus"
+  },
+  {
+   "t": 5.97,
+   "kind": "bell",
+   "sound": "kenney/impact/impactBell_heavy_001.ogg"
+  },
+  {
+   "t": 6.518,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in double 01.opus"
+  },
+  {
+   "t": 7.054,
+   "kind": "mallet",
+   "sound": "earshot/chime mallet/mallet celesta 02.opus"
+  },
+  {
+   "t": 7.88,
+   "kind": "pop_big",
+   "sound": "earshot/pop in/pro_pop_in knock 01.opus"
+  },
+  {
+   "t": 7.95,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big swell 01.opus"
+  },
+  {
+   "t": 8.18,
+   "kind": "pop",
+   "sound": "earshot/pop in/pro_pop_in double 02.opus"
+  },
+  {
+   "t": 8.699,
+   "kind": "mallet",
+   "sound": "earshot/chime mallet/mallet glock 01.opus"
+  },
+  {
+   "t": 10.312,
+   "kind": "toggle",
+   "sound": "kenney/interface/switch_003.ogg"
+  },
+  {
+   "t": 10.432,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_1822 02.opus"
+  },
+  {
+   "t": 11.3,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_1930 01.opus"
+  },
+  {
+   "t": 11.531,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_1930 02.opus"
+  },
+  {
+   "t": 11.762,
+   "kind": "ding",
+   "sound": "earshot/chime notification ding/pro_notify ding_2045 01.opus"
+  },
+  {
+   "t": 12.745,
+   "kind": "swell",
+   "sound": "earshot/riser reverse swell/reverse_swell short 02.opus"
+  },
+  {
+   "t": 13.045,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast tight 01.opus"
+  },
+  {
+   "t": 14.66,
+   "kind": "paper",
+   "sound": "kenney/casino/card-fan-2.ogg"
+  },
+  {
+   "t": 14.72,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big swell 02.opus"
+  },
+  {
+   "t": 15.22,
+   "kind": "mallet",
+   "sound": "earshot/chime mallet/mallet glock 02.opus"
+  },
+  {
+   "t": 16.268,
+   "kind": "paper",
+   "sound": "kenney/rpg/bookFlip1.ogg"
+  },
+  {
+   "t": 17.79,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast tight 02.opus"
+  },
+  {
+   "t": 17.97,
+   "kind": "whoosh",
+   "sound": "earshot/whoosh fast/whoosh_fast whip 01.opus"
+  },
+  {
+   "t": 19.07,
+   "kind": "paper",
+   "sound": "kenney/rpg/bookFlip2.ogg"
+  },
+  {
+   "t": 19.725,
+   "kind": "box",
+   "sound": "kenney/casino/cards-pack-take-out-1.ogg"
+  },
+  {
+   "t": 19.825,
+   "kind": "pop_big",
+   "sound": "earshot/pop in/pro_pop_in knock 02.opus"
+  },
+  {
+   "t": 20.43,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big tonal 01.opus"
+  },
+  {
+   "t": 20.86,
+   "kind": "pop_big",
+   "sound": "earshot/pop in/pro_pop_in deep 01.opus"
+  },
+  {
+   "t": 21.06,
+   "kind": "pop_big",
+   "sound": "earshot/pop in/pro_pop_in deep 02.opus"
+  },
+  {
+   "t": 22.6,
+   "kind": "wipe",
+   "sound": "earshot/whoosh big/pro_whoosh_big tonal 02.opus"
+  }
+ ]
+}
